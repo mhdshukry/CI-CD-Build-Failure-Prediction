@@ -1,543 +1,884 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>BuildRisk AI</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>BuildRisk AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 
-:root{
-  --bg:#172121;
-  --lime:#D2FF28;
-  --white:#F0EFF4;
-  --muted:#9aa6a3;
-  --card:#1f2d2d;
-  --dark2:#0d1717;
-  --line:rgba(240,239,244,.12);
-  --cyan:#64ffda;
-}
+    :root {
+      --bg: #172121;
+      --lime: #D2FF28;
+      --white: #F0EFF4;
+      --muted: #9aa6a3;
+      --dark2: #0d1717;
+      --line: rgba(240, 239, 244, .12);
+      --cyan: #64ffda;
+    }
 
-*{box-sizing:border-box;font-family:'Manrope',sans-serif}
+    * {
+      box-sizing: border-box;
+      font-family: 'Manrope', sans-serif
+    }
 
-body{
-  margin:0;
-  background:
-    radial-gradient(circle at 5% 0%,rgba(210,255,40,.17),transparent 28%),
-    radial-gradient(circle at 95% 0%,rgba(100,255,218,.12),transparent 24%),
-    linear-gradient(135deg,#172121,#091010 75%);
-  color:var(--white);
-}
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 5% 0%, rgba(210, 255, 40, .17), transparent 28%),
+        radial-gradient(circle at 95% 0%, rgba(100, 255, 218, .12), transparent 24%),
+        linear-gradient(135deg, #172121, #091010 75%);
+      color: var(--white);
+    }
 
-.page{max-width:1500px;margin:auto;padding:16px}
+    .page {
+      max-width: 1500px;
+      margin: auto;
+      padding: 16px
+    }
 
-.nav{
-  height:60px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 18px;
-  border-radius:20px;
-  background:rgba(31,45,45,.9);
-  border:1px solid var(--line);
-  margin-bottom:12px;
-}
+    .nav {
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      border-radius: 20px;
+      background: rgba(31, 45, 45, .9);
+      border: 1px solid var(--line);
+      margin-bottom: 12px;
+    }
 
-.brand{display:flex;align-items:center;gap:12px}
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px
+    }
 
-.logo{
-  width:40px;height:40px;border-radius:13px;
-  background:var(--lime);color:var(--bg);
-  display:grid;place-items:center;font-weight:900;
-}
+    .logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 13px;
+      background: var(--lime);
+      color: var(--bg);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+    }
 
-.brand h1{margin:0;font-size:20px;font-weight:900}
-.brand p{margin:0;color:var(--muted);font-size:12px}
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 900
+    }
 
-.api{
-  color:var(--lime);
-  border:1px solid rgba(210,255,40,.32);
-  background:rgba(210,255,40,.08);
-  padding:9px 14px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:900;
-}
+    .brand p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px
+    }
 
-.top-summary{
-  display:grid;
-  grid-template-columns:1fr 300px;
-  gap:12px;
-  margin-bottom:12px;
-}
+    .api {
+      color: var(--lime);
+      border: 1px solid rgba(210, 255, 40, .32);
+      background: rgba(210, 255, 40, .08);
+      padding: 9px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+    }
 
-.hero,.kpi-box,.card{
-  border-radius:22px;
-  background:linear-gradient(180deg,rgba(31,45,45,.96),rgba(17,27,27,.96));
-  border:1px solid var(--line);
-}
+    .top-summary {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
 
-.hero{
-  padding:20px;
-  min-height:135px;
-}
+    .hero,
+    .card {
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(31, 45, 45, .96), rgba(17, 27, 27, .96));
+      border: 1px solid var(--line);
+    }
 
-.hero h2{
-  margin:0;
-  font-size:32px;
-  line-height:1.04;
-  letter-spacing:-1.2px;
-  font-weight:900;
-}
+    .hero {
+      padding: 20px;
+      min-height: 135px;
+    }
 
-.hero span{color:var(--lime)}
+    .hero h2 {
+      margin: 0;
+      font-size: 32px;
+      line-height: 1.04;
+      letter-spacing: -1.2px;
+      font-weight: 900;
+    }
 
-.hero p{
-  margin:9px 0 0;
-  color:var(--muted);
-  font-size:13.5px;
-  line-height:1.55;
-  max-width:850px;
-}
+    .hero span {
+      color: var(--lime)
+    }
 
-.kpis{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
+    .hero p {
+      margin: 9px 0 0;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.55;
+      max-width: 850px;
+    }
 
-.kpi{
-  border-radius:18px;
-  padding:14px;
-  background:rgba(31,45,45,.96);
-  border:1px solid var(--line);
-}
+    .kpis {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
 
-.kpi small{color:var(--muted);font-size:11px;font-weight:800}
-.kpi strong{display:block;margin-top:4px;color:var(--lime);font-size:20px;font-weight:900}
+    .kpi {
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(31, 45, 45, .96);
+      border: 1px solid var(--line);
+    }
 
-.main{
-  display:grid;
-  grid-template-columns:430px 1fr;
-  gap:12px;
-  align-items:start;
-}
+    .kpi small {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800
+    }
 
-.card{
-  padding:16px;
-  box-shadow:0 24px 60px rgba(0,0,0,.2);
-}
+    .kpi strong {
+      display: block;
+      margin-top: 4px;
+      color: var(--lime);
+      font-size: 20px;
+      font-weight: 900
+    }
 
-.card-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:12px;
-}
+    .main {
+      display: grid;
+      grid-template-columns: 430px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
 
-.card-head h3{margin:0;font-size:17px;font-weight:900}
+    .card {
+      padding: 16px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, .2);
+    }
 
-.badge{
-  background:var(--lime);
-  color:var(--bg);
-  border-radius:999px;
-  padding:7px 11px;
-  font-size:11px;
-  font-weight:900;
-}
+    .card-section {
+      margin-top: 12px
+    }
 
-.form-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
-}
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
 
-.group{margin-bottom:7px}
+    .card-head h3 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 900
+    }
 
-label{
-  display:block;
-  color:#c7d0cd;
-  font-size:10.8px;
-  font-weight:900;
-  margin-bottom:5px;
-}
+    .badge {
+      background: var(--lime);
+      color: var(--bg);
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 11px;
+      font-weight: 900;
+    }
 
-input,select,textarea{
-  width:100%;
-  border:1px solid rgba(240,239,244,.13);
-  background:var(--dark2);
-  color:var(--white);
-  border-radius:13px;
-  padding:10px 11px;
-  outline:none;
-  font-size:12.8px;
-  font-weight:700;
-}
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+    }
 
-textarea{
-  min-height:52px;
-  max-height:64px;
-  resize:none;
-}
+    .group {
+      margin-bottom: 7px
+    }
 
-input:focus,select:focus,textarea:focus{
-  border-color:var(--lime);
-  box-shadow:0 0 0 3px rgba(210,255,40,.12);
-}
+    label {
+      display: block;
+      color: #c7d0cd;
+      font-size: 10.8px;
+      font-weight: 900;
+      margin-bottom: 5px;
+    }
 
-.wide{grid-column:1/-1}
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(240, 239, 244, .13);
+      background: var(--dark2);
+      color: var(--white);
+      border-radius: 13px;
+      padding: 10px 11px;
+      outline: none;
+      font-size: 12.8px;
+      font-weight: 700;
+    }
 
-.buttons{display:flex;gap:9px;margin-top:4px}
+    textarea {
+      min-height: 52px;
+      max-height: 64px;
+      resize: none;
+    }
 
-button{
-  border:none;
-  cursor:pointer;
-  border-radius:14px;
-  padding:12px 15px;
-  font-size:12.8px;
-  font-weight:900;
-}
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--lime);
+      box-shadow: 0 0 0 3px rgba(210, 255, 40, .12);
+    }
 
-.primary{
-  flex:1;
-  background:linear-gradient(135deg,var(--lime),var(--cyan));
-  color:var(--bg);
-}
+    .wide {
+      grid-column: 1/-1
+    }
 
-.secondary{
-  background:rgba(240,239,244,.08);
-  color:var(--white);
-  border:1px solid var(--line);
-}
+    .buttons {
+      display: flex;
+      gap: 9px;
+      margin-top: 4px
+    }
 
-.output-top{
-  display:grid;
-  grid-template-columns:245px 1fr;
-  gap:12px;
-  margin-bottom:12px;
-}
+    button {
+      border: none;
+      cursor: pointer;
+      border-radius: 14px;
+      padding: 12px 15px;
+      font-size: 12.8px;
+      font-weight: 900;
+    }
 
-.score-card{
-  min-height:215px;
-  border-radius:22px;
-  background:
-    radial-gradient(circle at top,rgba(210,255,40,.42),transparent 52%),
-    var(--dark2);
-  border:1px solid rgba(210,255,40,.25);
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  padding:16px;
-}
+    .primary {
+      flex: 1;
+      background: linear-gradient(135deg, var(--lime), var(--cyan));
+      color: var(--bg);
+    }
 
-.score-card small{color:var(--muted);font-size:11px;font-weight:900}
+    .secondary {
+      background: rgba(240, 239, 244, .08);
+      color: var(--white);
+      border: 1px solid var(--line);
+    }
 
-.score{
-  font-size:48px;
-  font-weight:900;
-  color:var(--lime);
-  margin:7px 0;
-  letter-spacing:-2px;
-}
+    .output-top {
+      display: grid;
+      grid-template-columns: 245px 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
 
-.level{
-  border-radius:999px;
-  padding:7px 12px;
-  background:rgba(210,255,40,.1);
-  border:1px solid rgba(210,255,40,.25);
-  color:var(--lime);
-  font-size:11px;
-  font-weight:900;
-}
+    .score-card {
+      min-height: 215px;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at top, rgba(210, 255, 40, .42), transparent 52%),
+        var(--dark2);
+      border: 1px solid rgba(210, 255, 40, .25);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 16px;
+    }
 
-.prediction{
-  margin-top:8px;
-  color:#cbd5d2;
-  font-size:12px;
-  font-weight:800;
-}
+    .score-card small {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900
+    }
 
-.metric-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:9px;
-  margin-bottom:9px;
-}
+    .score {
+      font-size: 48px;
+      font-weight: 900;
+      color: var(--lime);
+      margin: 7px 0;
+      letter-spacing: -2px;
+    }
 
-.metric,.evidence{
-  border-radius:16px;
-  background:var(--dark2);
-  border:1px solid var(--line);
-  padding:12px;
-}
+    .level {
+      border-radius: 999px;
+      padding: 7px 12px;
+      background: rgba(210, 255, 40, .1);
+      border: 1px solid rgba(210, 255, 40, .25);
+      color: var(--lime);
+      font-size: 11px;
+      font-weight: 900;
+    }
 
-.metric small,.evidence small{color:var(--muted);font-size:10.8px;font-weight:900}
+    .prediction {
+      margin-top: 8px;
+      color: #cbd5d2;
+      font-size: 12px;
+      font-weight: 800;
+    }
 
-.metric strong{
-  display:block;
-  color:var(--cyan);
-  margin-top:4px;
-  font-size:18px;
-  font-weight:900;
-}
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+      margin-bottom: 9px;
+    }
 
-.evidence-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
-}
+    .metric,
+    .evidence {
+      border-radius: 16px;
+      background: var(--dark2);
+      border: 1px solid var(--line);
+      padding: 12px;
+    }
 
-.evidence.full{margin-top:9px}
+    .metric small,
+    .evidence small {
+      color: var(--muted);
+      font-size: 10.8px;
+      font-weight: 900
+    }
 
-.evidence p{
-  margin:4px 0 0;
-  color:#d8dfdd;
-  font-size:12.8px;
-  line-height:1.35;
-}
+    .metric strong {
+      display: block;
+      color: var(--cyan);
+      margin-top: 4px;
+      font-size: 18px;
+      font-weight: 900;
+    }
 
-.detail-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-}
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+    }
 
-.detail{
-  min-height:128px;
-  border-radius:18px;
-  background:var(--dark2);
-  border:1px solid var(--line);
-  padding:13px;
-  position:relative;
-  overflow:hidden;
-}
+    .evidence.full {
+      margin-top: 9px
+    }
 
-.detail:before{
-  content:"";
-  position:absolute;
-  top:0;left:0;width:100%;height:3px;
-  background:linear-gradient(90deg,var(--lime),var(--cyan));
-}
+    .evidence p {
+      margin: 4px 0 0;
+      color: #d8dfdd;
+      font-size: 12.8px;
+      line-height: 1.35;
+    }
 
-.detail h4{
-  margin:0 0 8px;
-  font-size:12.5px;
-  font-weight:900;
-  color:var(--lime);
-}
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
 
-ul{
-  margin:0;
-  padding-left:17px;
-  color:#cbd5d2;
-  font-size:12.3px;
-  line-height:1.55;
-}
+    .detail {
+      min-height: 128px;
+      border-radius: 18px;
+      background: var(--dark2);
+      border: 1px solid var(--line);
+      padding: 13px;
+      position: relative;
+      overflow: hidden;
+    }
 
-@media(max-width:1200px){
-  .top-summary,.main,.output-top{grid-template-columns:1fr}
-}
+    .detail:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--lime), var(--cyan));
+    }
 
-@media(max-width:760px){
-  .page{padding:10px}
-  .nav{height:auto;align-items:flex-start;flex-direction:column;padding:14px}
-  .hero h2{font-size:26px}
-  .kpis,.form-grid,.metric-grid,.evidence-grid,.detail-grid{grid-template-columns:1fr}
-}
-</style>
+    .detail h4 {
+      margin: 0 0 8px;
+      font-size: 12.5px;
+      font-weight: 900;
+      color: var(--lime);
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 17px;
+      color: #cbd5d2;
+      font-size: 12.3px;
+      line-height: 1.55;
+    }
+
+    .commit-box {
+      margin-top: 12px;
+      border-radius: 18px;
+      background: rgba(13, 23, 23, .8);
+      border: 1px solid var(--line);
+      padding: 12px;
+    }
+
+    .commit-box small {
+      display: block;
+      color: var(--muted);
+      font-size: 10.8px;
+      font-weight: 900;
+    }
+
+    .commit-box p {
+      margin: 5px 0 0;
+      color: #d8dfdd;
+      font-size: 12.5px;
+      line-height: 1.45;
+    }
+
+    .history-section {
+      margin-top: 12px
+    }
+
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .history-table th {
+      text-align: left;
+      color: var(--lime);
+      font-size: 11px;
+      padding: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .history-table td {
+      padding: 10px;
+      font-size: 12px;
+      color: #d8dfdd;
+      border-bottom: 1px solid rgba(240, 239, 244, .06);
+    }
+
+    .history-score {
+      color: var(--cyan);
+      font-weight: 900;
+    }
+
+    .history-badge {
+      background: rgba(210, 255, 40, .1);
+      border: 1px solid rgba(210, 255, 40, .25);
+      color: var(--lime);
+      padding: 5px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 900;
+    }
+
+    @media(max-width:1200px) {
+
+      .top-summary,
+      .main,
+      .output-top {
+        grid-template-columns: 1fr
+      }
+    }
+
+    @media(max-width:760px) {
+      .page {
+        padding: 10px
+      }
+
+      .nav {
+        height: auto;
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 14px
+      }
+
+      .hero h2 {
+        font-size: 26px
+      }
+
+      .kpis,
+      .form-grid,
+      .metric-grid,
+      .evidence-grid,
+      .detail-grid {
+        grid-template-columns: 1fr
+      }
+    }
+  </style>
 </head>
 
 <body>
-<div class="page">
+  <div class="page">
 
-  <nav class="nav">
-    <div class="brand">
-      <div class="logo">AI</div>
-      <div>
-        <h1>BuildRisk AI</h1>
-        <p>CI/CD failure risk prediction system</p>
-      </div>
-    </div>
-    <div class="api">● API LIVE</div>
-  </nav>
-
-  <section class="top-summary">
-    <div class="hero">
-      <h2>Predict <span>CI/CD Build Risk</span> Before Execution</h2>
-      <p>
-        Hybrid ML and rule-based CI/CD analysis with build error evidence, risky file detection,
-        developer guidance and post-build learning readiness.
-      </p>
-    </div>
-
-    <div class="kpis">
-      <div class="kpi"><small>Dataset</small><strong>2290</strong></div>
-      <div class="kpi"><small>Failures</small><strong>319</strong></div>
-      <div class="kpi"><small>Best Model</small><strong>XGB</strong></div>
-      <div class="kpi"><small>ROC-AUC</small><strong>77.6%</strong></div>
-    </div>
-  </section>
-
-  <section class="main">
-    <div class="card">
-      <div class="card-head">
-        <h3>Commit Input</h3>
-        <span class="badge">Analyze</span>
-      </div>
-
-      <div class="form-grid">
-        <div class="group"><label>Files Changed</label><input id="files_changed" type="number" value="35"></div>
-        <div class="group"><label>Total Changes</label><input id="total_changes" type="number" value="540"></div>
-        <div class="group"><label>Lines Added</label><input id="lines_added" type="number" value="420"></div>
-        <div class="group"><label>Lines Deleted</label><input id="lines_deleted" type="number" value="120"></div>
-
-        <div class="group"><label>Dependency File</label><select id="dependency_file_changed"><option value="1">Changed</option><option value="0">Not Changed</option></select></div>
-        <div class="group"><label>Test File</label><select id="test_file_changed"><option value="0">Not Changed</option><option value="1">Changed</option></select></div>
-        <div class="group"><label>Workflow File</label><select id="workflow_changed"><option value="1">Changed</option><option value="0">Not Changed</option></select></div>
-        <div class="group"><label>Source File</label><select id="source_file_changed"><option value="1">Changed</option><option value="0">Not Changed</option></select></div>
-
-        <div class="group wide">
-          <label>Changed Files</label>
-          <textarea id="changed_files">requirements.txt, .github/workflows/ci.yml, src/main.py, tests/test_main.py</textarea>
-        </div>
-
-        <div class="group"><label>Previous Build Status</label><select id="previous_build_status"><option value="failure">Failure</option><option value="success">Success</option><option value="unknown">Unknown</option></select></div>
-        <div class="group"><label>Previous Failed Step</label><input id="previous_failed_step" value="Run tests"></div>
-
-        <div class="group wide">
-          <label>Previous Error Message</label>
-          <textarea id="previous_error_message">ModuleNotFoundError: No module named requests</textarea>
-        </div>
-      </div>
-
-      <div class="buttons">
-        <button class="primary" onclick="predictRisk()">Analyze Build Risk</button>
-        <button class="secondary" onclick="resetForm()">Reset</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-head">
-        <h3>Prediction Output</h3>
-        <span class="badge">AI Result</span>
-      </div>
-
-      <div class="output-top">
-        <div class="score-card">
-          <small>Final Failure Risk</small>
-          <div class="score" id="riskScore">--</div>
-          <div class="level" id="riskLevel">Waiting</div>
-          <div class="prediction" id="predictionText">Submit commit data</div>
-        </div>
-
+    <nav class="nav">
+      <div class="brand">
+        <div class="logo">AI</div>
         <div>
-          <div class="metric-grid">
-            <div class="metric"><small>ML Probability</small><strong id="mlScore">--</strong></div>
-            <div class="metric"><small>Rule Score</small><strong id="ruleScore">--</strong></div>
-            <div class="metric"><small>Error Type</small><strong id="errorCategory">--</strong></div>
+          <h1>BuildRisk AI</h1>
+          <p>CI/CD failure risk prediction system</p>
+        </div>
+      </div>
+      <div class="api">● API LIVE</div>
+    </nav>
+
+    <section class="top-summary">
+      <div class="hero">
+        <h2>Predict <span>CI/CD Build Risk</span> Before Execution</h2>
+        <p>
+          Hybrid ML and rule-based CI/CD analysis with build error evidence, risky file detection,
+          developer guidance and post-build learning readiness.
+        </p>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi"><small>Dataset</small><strong>2290</strong></div>
+        <div class="kpi"><small>Failures</small><strong>319</strong></div>
+        <div class="kpi"><small>Best Model</small><strong>XGB</strong></div>
+        <div class="kpi"><small>ROC-AUC</small><strong>77.6%</strong></div>
+      </div>
+    </section>
+
+    <section class="main">
+
+      <div>
+        <div class="card">
+          <div class="card-head">
+            <h3>Auto Latest Commit</h3>
+            <span class="badge">Auto Fetch</span>
           </div>
 
-          <div class="evidence-grid">
-            <div class="evidence"><small>Previous Status</small><p id="prevStatus">--</p></div>
-            <div class="evidence"><small>Failed Step</small><p id="prevStep">--</p></div>
+          <div class="form-grid">
+            <div class="group wide">
+              <label>Local Repository Path</label>
+              <input id="repo_path" value="D:\CI-CD-Build-Failure-Prediction">
+            </div>
+
+            <div class="group">
+              <label>Previous Build Status</label>
+              <select id="auto_previous_build_status">
+                <option value="failure">Failure</option>
+                <option value="success">Success</option>
+                <option value="unknown">Unknown</option>
+              </select>
+            </div>
+
+            <div class="group">
+              <label>Previous Failed Step</label>
+              <input id="auto_previous_failed_step" value="Run tests">
+            </div>
+
+            <div class="group wide">
+              <label>Previous Error Message</label>
+              <textarea id="auto_previous_error_message">ModuleNotFoundError: No module named requests</textarea>
+            </div>
           </div>
 
-          <div class="evidence full">
-            <small>Previous Error Message</small>
-            <p id="prevError">--</p>
+          <div class="buttons">
+            <button class="primary" onclick="analyzeLatestCommit()">Analyze Latest Commit Automatically</button>
+          </div>
+        </div>
+
+        <div class="card card-section">
+          <div class="card-head">
+            <h3>Manual Commit Input</h3>
+            <span class="badge">Manual</span>
+          </div>
+
+          <div class="form-grid">
+            <div class="group"><label>Files Changed</label><input id="files_changed" type="number" value="35"></div>
+            <div class="group"><label>Total Changes</label><input id="total_changes" type="number" value="540"></div>
+            <div class="group"><label>Lines Added</label><input id="lines_added" type="number" value="420"></div>
+            <div class="group"><label>Lines Deleted</label><input id="lines_deleted" type="number" value="120"></div>
+
+            <div class="group"><label>Dependency File</label><select id="dependency_file_changed">
+                <option value="1">Changed</option>
+                <option value="0">Not Changed</option>
+              </select></div>
+            <div class="group"><label>Test File</label><select id="test_file_changed">
+                <option value="0">Not Changed</option>
+                <option value="1">Changed</option>
+              </select></div>
+            <div class="group"><label>Workflow File</label><select id="workflow_changed">
+                <option value="1">Changed</option>
+                <option value="0">Not Changed</option>
+              </select></div>
+            <div class="group"><label>Source File</label><select id="source_file_changed">
+                <option value="1">Changed</option>
+                <option value="0">Not Changed</option>
+              </select></div>
+
+            <div class="group wide">
+              <label>Changed Files</label>
+              <textarea
+                id="changed_files">requirements.txt, .github/workflows/ci.yml, src/main.py, tests/test_main.py</textarea>
+            </div>
+
+            <div class="group"><label>Previous Build Status</label><select id="previous_build_status">
+                <option value="failure">Failure</option>
+                <option value="success">Success</option>
+                <option value="unknown">Unknown</option>
+              </select></div>
+            <div class="group"><label>Previous Failed Step</label><input id="previous_failed_step" value="Run tests">
+            </div>
+
+            <div class="group wide">
+              <label>Previous Error Message</label>
+              <textarea id="previous_error_message">ModuleNotFoundError: No module named requests</textarea>
+            </div>
+          </div>
+
+          <div class="buttons">
+            <button class="primary" onclick="predictRisk()">Analyze Build Risk</button>
+            <button class="secondary" onclick="resetForm()">Reset</button>
           </div>
         </div>
       </div>
 
-      <div class="detail-grid">
-        <div class="detail">
-          <h4>Risky Files</h4>
-          <ul id="riskyFiles"><li>No risky files detected yet</li></ul>
+      <div>
+        <div class="card">
+          <div class="card-head">
+            <h3>Prediction Output</h3>
+            <span class="badge">AI Result</span>
+          </div>
+
+          <div class="output-top">
+            <div class="score-card">
+              <small>Final Failure Risk</small>
+              <div class="score" id="riskScore">--</div>
+              <div class="level" id="riskLevel">Waiting</div>
+              <div class="prediction" id="predictionText">Submit commit data</div>
+            </div>
+
+            <div>
+              <div class="metric-grid">
+                <div class="metric"><small>ML Probability</small><strong id="mlScore">--</strong></div>
+                <div class="metric"><small>Rule Score</small><strong id="ruleScore">--</strong></div>
+                <div class="metric"><small>Error Type</small><strong id="errorCategory">--</strong></div>
+              </div>
+
+              <div class="evidence-grid">
+                <div class="evidence"><small>Previous Status</small>
+                  <p id="prevStatus">--</p>
+                </div>
+                <div class="evidence"><small>Failed Step</small>
+                  <p id="prevStep">--</p>
+                </div>
+              </div>
+
+              <div class="evidence full">
+                <small>Previous Error Message</small>
+                <p id="prevError">--</p>
+              </div>
+
+              <div class="commit-box">
+                <small>Commit ID</small>
+                <p id="commitId">--</p>
+              </div>
+
+              <div class="commit-box">
+                <small>Commit Message</small>
+                <p id="commitMessage">--</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-grid">
+            <div class="detail">
+              <h4>Risky Files</h4>
+              <ul id="riskyFiles">
+                <li>No risky files detected yet</li>
+              </ul>
+            </div>
+
+            <div class="detail">
+              <h4>Post-Build Learning</h4>
+              <ul id="learning">
+                <li>Waiting for prediction</li>
+              </ul>
+            </div>
+
+            <div class="detail">
+              <h4>AI Explanation</h4>
+              <ul id="reasons">
+                <li>No prediction yet</li>
+              </ul>
+            </div>
+
+            <div class="detail">
+              <h4>Suggested Fixes</h4>
+              <ul id="suggestions">
+                <li>No suggestions yet</li>
+              </ul>
+            </div>
+          </div>
         </div>
 
-        <div class="detail">
-          <h4>Post-Build Learning</h4>
-          <ul id="learning"><li>Waiting for prediction</li></ul>
-        </div>
+        <div class="card history-section">
+          <div class="card-head">
+            <h3>Prediction History</h3>
+            <span class="badge">Learning Log</span>
+          </div>
 
-        <div class="detail">
-          <h4>AI Explanation</h4>
-          <ul id="reasons"><li>No prediction yet</li></ul>
-        </div>
-
-        <div class="detail">
-          <h4>Suggested Fixes</h4>
-          <ul id="suggestions"><li>No suggestions yet</li></ul>
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Source</th>
+                <th>Risk</th>
+                <th>Level</th>
+                <th>Error</th>
+              </tr>
+            </thead>
+            <tbody id="historyBody">
+              <tr>
+                <td colspan="5">No history available</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-    </div>
-  </section>
-</div>
 
-<script>
-async function predictRisk(){
-  const dependency = Number(document.getElementById("dependency_file_changed").value);
-  const test = Number(document.getElementById("test_file_changed").value);
-  const workflow = Number(document.getElementById("workflow_changed").value);
-  const source = Number(document.getElementById("source_file_changed").value);
+    </section>
+  </div>
 
-  const data = {
-    files_changed: Number(document.getElementById("files_changed").value),
-    lines_added: Number(document.getElementById("lines_added").value),
-    lines_deleted: Number(document.getElementById("lines_deleted").value),
-    total_changes: Number(document.getElementById("total_changes").value),
-    dependency_file_changed: dependency,
-    test_file_changed: test,
-    workflow_changed: workflow,
-    source_file_changed: source,
-    risk_file_count: dependency + test + workflow + source,
-    changed_files: document.getElementById("changed_files").value,
-    previous_build_status: document.getElementById("previous_build_status").value,
-    previous_error_message: document.getElementById("previous_error_message").value,
-    previous_failed_step: document.getElementById("previous_failed_step").value
-  };
+  <script>
+    function renderPrediction(result) {
+      document.getElementById("riskScore").innerText = result.final_failure_risk_score + "%";
+      document.getElementById("riskLevel").innerText = result.risk_level;
+      document.getElementById("predictionText").innerText = result.prediction;
+      document.getElementById("mlScore").innerText = result.ml_failure_probability + "%";
+      document.getElementById("ruleScore").innerText = result.rule_based_risk_score + "%";
+      document.getElementById("errorCategory").innerText = result.error_category;
 
-  const response = await fetch("http://127.0.0.1:8000/predict",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify(data)
-  });
+      document.getElementById("prevStatus").innerText = result.previous_build_status;
+      document.getElementById("prevStep").innerText = result.previous_failed_step || "Not available";
+      document.getElementById("prevError").innerText = result.previous_error_message || "No previous error message";
 
-  const result = await response.json();
+      document.getElementById("riskyFiles").innerHTML =
+        result.risky_files.length ? result.risky_files.map(x => `<li>${x}</li>`).join("") : "<li>No risky files detected</li>";
 
-  document.getElementById("riskScore").innerText = result.final_failure_risk_score + "%";
-  document.getElementById("riskLevel").innerText = result.risk_level;
-  document.getElementById("predictionText").innerText = result.prediction;
-  document.getElementById("mlScore").innerText = result.ml_failure_probability + "%";
-  document.getElementById("ruleScore").innerText = result.rule_based_risk_score + "%";
-  document.getElementById("errorCategory").innerText = result.error_category;
+      document.getElementById("learning").innerHTML =
+        `<li>${result.post_build_learning_status}</li>`;
 
-  document.getElementById("prevStatus").innerText = result.previous_build_status;
-  document.getElementById("prevStep").innerText = result.previous_failed_step || "Not available";
-  document.getElementById("prevError").innerText = result.previous_error_message || "No previous error message";
+      document.getElementById("reasons").innerHTML =
+        result.reasons.map(x => `<li>${x}</li>`).join("");
 
-  document.getElementById("riskyFiles").innerHTML =
-    result.risky_files.length ? result.risky_files.map(x => `<li>${x}</li>`).join("") : "<li>No risky files detected</li>";
+      document.getElementById("suggestions").innerHTML =
+        result.suggestions.map(x => `<li>${x}</li>`).join("");
+    }
 
-  document.getElementById("learning").innerHTML =
-    `<li>${result.post_build_learning_status}</li>`;
+    async function predictRisk() {
+      const dependency = Number(document.getElementById("dependency_file_changed").value);
+      const test = Number(document.getElementById("test_file_changed").value);
+      const workflow = Number(document.getElementById("workflow_changed").value);
+      const source = Number(document.getElementById("source_file_changed").value);
 
-  document.getElementById("reasons").innerHTML =
-    result.reasons.map(x => `<li>${x}</li>`).join("");
+      const data = {
+        files_changed: Number(document.getElementById("files_changed").value),
+        lines_added: Number(document.getElementById("lines_added").value),
+        lines_deleted: Number(document.getElementById("lines_deleted").value),
+        total_changes: Number(document.getElementById("total_changes").value),
+        dependency_file_changed: dependency,
+        test_file_changed: test,
+        workflow_changed: workflow,
+        source_file_changed: source,
+        risk_file_count: dependency + test + workflow + source,
+        changed_files: document.getElementById("changed_files").value,
+        previous_build_status: document.getElementById("previous_build_status").value,
+        previous_error_message: document.getElementById("previous_error_message").value,
+        previous_failed_step: document.getElementById("previous_failed_step").value
+      };
 
-  document.getElementById("suggestions").innerHTML =
-    result.suggestions.map(x => `<li>${x}</li>`).join("");
-}
+      const response = await fetch("http://127.0.0.1:8000/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
 
-function resetForm(){
-  document.querySelectorAll("input[type='number']").forEach(x => x.value = 0);
-  document.getElementById("changed_files").value = "";
-  document.getElementById("previous_error_message").value = "";
-  document.getElementById("previous_failed_step").value = "";
-}
-</script>
+      const result = await response.json();
+
+      document.getElementById("commitId").innerText = "Manual input";
+      document.getElementById("commitMessage").innerText = "Manual commit feature analysis";
+
+      renderPrediction(result);
+      loadHistory();
+    }
+
+    async function analyzeLatestCommit() {
+      const data = {
+        repo_path: document.getElementById("repo_path").value,
+        previous_build_status: document.getElementById("auto_previous_build_status").value,
+        previous_error_message: document.getElementById("auto_previous_error_message").value,
+        previous_failed_step: document.getElementById("auto_previous_failed_step").value
+      };
+
+      const response = await fetch("http://127.0.0.1:8000/analyze-local-repo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      if (result.error) {
+        alert(result.error);
+        return;
+      }
+
+      const commit = result.commit_analysis;
+      const prediction = result.prediction;
+
+      document.getElementById("files_changed").value = commit.files_changed;
+      document.getElementById("lines_added").value = commit.lines_added;
+      document.getElementById("lines_deleted").value = commit.lines_deleted;
+      document.getElementById("total_changes").value = commit.total_changes;
+      document.getElementById("dependency_file_changed").value = commit.dependency_file_changed;
+      document.getElementById("test_file_changed").value = commit.test_file_changed;
+      document.getElementById("workflow_changed").value = commit.workflow_changed;
+      document.getElementById("source_file_changed").value = commit.source_file_changed;
+      document.getElementById("changed_files").value = commit.changed_files;
+
+      document.getElementById("commitId").innerText = commit.commit_id;
+      document.getElementById("commitMessage").innerText = commit.commit_message;
+
+      renderPrediction(prediction);
+      loadHistory();
+    }
+
+    function resetForm() {
+      document.querySelectorAll("input[type='number']").forEach(x => x.value = 0);
+      document.getElementById("changed_files").value = "";
+      document.getElementById("previous_error_message").value = "";
+      document.getElementById("previous_failed_step").value = "";
+      document.getElementById("commitId").innerText = "--";
+      document.getElementById("commitMessage").innerText = "--";
+    }
+
+    async function loadHistory() {
+      const response = await fetch("http://127.0.0.1:8000/history");
+      const data = await response.json();
+
+      let html = "";
+
+      data.history.reverse().forEach(item => {
+        html += `
+      <tr>
+        <td>${item.timestamp}</td>
+        <td><span class="history-badge">${item.source}</span></td>
+        <td class="history-score">${item.risk_score}%</td>
+        <td>${item.risk_level}</td>
+        <td>${item.error_category}</td>
+      </tr>
+    `;
+      });
+
+      document.getElementById("historyBody").innerHTML =
+        html || "<tr><td colspan='5'>No history</td></tr>";
+    }
+
+    loadHistory();
+  </script>
 </body>
+
 </html>
