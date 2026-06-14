@@ -1,17 +1,4 @@
-timestamp,source,commit_id,risk_score,risk_level,prediction,ml_probability,rule_score,error_category
-2026-06-14 03:17:51,local-repo,8dd4415f21e3819f04d6176366c2fca25c185e97,88.62,High Risk,Failure Risk Detected,87.7,90,Dependency Error
-2026-06-14 03:26:48,local-repo,8dd4415f21e3819f04d6176366c2fca25c185e97,82.62,High Risk,Failure Risk Detected,87.7,75,Dependency Error
-2026-06-14 14:44:20,github-repo,36e4a824f340fdee7ed50937ba8e7f6bc7d17f81,50.62,Medium Risk,Failure Risk Detected,74.36,15,No previous error available
-2026-06-14 15:17:21,github-repo,36e4a824f340fdee7ed50937ba8e7f6bc7d17f81,60.62,Medium Risk,Failure Risk Detected,74.36,40,General Build Error
-2026-06-14 15:48:15,github-repo,36e4a824f340fdee7ed50937ba8e7f6bc7d17f81,60.62,Medium Risk,Failure Risk Detected,74.36,40,General Build Error
-2026-06-14 15:48:16,github-repo,36e4a824f340fdee7ed50937ba8e7f6bc7d17f81,60.62,Medium Risk,Failure Risk Detected,74.36,40,General Build Error
-2026-06-14 15:48:17,github-repo,36e4a824f340fdee7ed50937ba8e7f6bc7d17f81,60.62,Medium Risk,Failure Risk Detected,74.36,40,General Build Error
-2026-06-14 15:48:17,github-repo,36e4a824f340fdee7ed50937ba8e7f6bc7d17f81,60.62,Medium Risk,Failure Risk Detected,74.36,40,General Build Error
-2026-06-14 15:48:20,github-repo,36e4a824f340fdee7ed50937ba8e7f6bc7d17f81,60.62,Medium Risk,Failure Risk Detected,74.36,40,General Build Error
-2026-06-14 15:48:27,github-repo,36e4a824f340fdee7ed50937ba8e7f6bc7d17f81,60.62,Medium Risk,Failure Risk Detected,74.36,40,General Build Error
-2026-06-14 15:48:33,github-repo,36e4a824f340fdee7ed50937ba8e7f6bc7d17f81,60.62,Medium Risk,Failure Risk Detected,74.36,40,General Build Error
-2026-06-14 15:48:38,github-repo,36e4a824f340fdee7ed50937ba8e7f6bc7d17f81,60.62,Medium Risk,Failure Risk Detected,74.36,40,General Build Error
-2026-06-14 15:48:42,github-repo,36e4a824f340fdee7ed50937ba8e7f6bc7d17f81,60.62,Medium Risk,Failure Risk Detected,74.36,40,General Build Error
-2026-06-14 16:27:25,github-repo,36e4a824f340fdee7ed50937ba8e7f6bc7d17f81,60.62,Medium Risk,Failure Risk Detected,74.36,40,General Build Error
-2026-06-14 16:52:45,github-repo,36e4a824f340fdee7ed50937ba8e7f6bc7d17f81,60.62,Medium Risk,Failure Risk Detected,74.36,40,General Build Error
-2026-06-14 17:14:20,github-repo,eff7cedd0b547e42a017b64ca8b4e2e977a54dde,58.82,Medium Risk,Failure Risk Detected,88.03,15,No previous error available
+timestamp,source,repository,commit_id,risk_score,risk_level,prediction,ml_probability,rule_score,error_category
+2026-06-14 20:50:18,github-repo,pallets/flask,36e4a824f340fdee7ed50937ba8e7f6bc7d17f81,60.62,Medium Risk,Failure Risk Detected,74.36,40,CI/CD Workflow Error
+2026-06-14 21:08:39,github-repo,mhdshukry/CI-CD-Build-Failure-Prediction,0c4fdcf52f53df92a499b78c2852741f1857f063,24.17,Low Risk,Likely Success,16.96,35,No previous error available
+2026-06-14 21:09:58,github-repo,mhdshukry/CI-CD-Build-Failure-Prediction,0c4fdcf52f53df92a499b78c2852741f1857f063,24.17,Low Risk,Likely Success,16.96,35,No previous error available

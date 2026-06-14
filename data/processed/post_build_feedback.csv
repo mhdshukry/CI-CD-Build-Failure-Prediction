@@ -3,3 +3,6 @@ timestamp,commit_id,predicted_risk_score,predicted_risk_level,actual_result,actu
 2026-06-14 16:53:49,36e4a824f340fdee7ed50937ba8e7f6bc7d17f81,60.62,Medium Risk,failure,Previous GitHub Action failed,Lock inactive closed issues
 2026-06-14 17:14:28,eff7cedd0b547e42a017b64ca8b4e2e977a54dde,58.82,Medium Risk,success,,
 2026-06-14 17:14:30,eff7cedd0b547e42a017b64ca8b4e2e977a54dde,58.82,Medium Risk,success,,
+2026-06-14 17:16:28,0c4fdcf52f53df92a499b78c2852741f1857f063,24.17,Low Risk,unknown,,
+2026-06-14 21:08:50,mhdshukry/CI-CD-Build-Failure-Prediction,0c4fdcf52f53df92a499b78c2852741f1857f063,24.17,Low Risk,success,,
+2026-06-14 21:09:31,mhdshukry/CI-CD-Build-Failure-Prediction,0c4fdcf52f53df92a499b78c2852741f1857f063,24.17,Low Risk,success,,

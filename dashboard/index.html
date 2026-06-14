@@ -989,6 +989,9 @@
     let historyPage = 1;
     const historyPageSize = 5;
 
+    let autoFetchTimer = null;
+    const API_BASE = "http://127.0.0.1:8000";
+
 
     function setConnectionStatus(type, text) {
       const status = document.getElementById("connectionStatus");
@@ -1016,7 +1019,37 @@
     }
 
 
+    function saveState() {
+      if (connectedCommitData) {
+        localStorage.setItem(
+          "buildrisk_commit",
+          JSON.stringify(connectedCommitData)
+        );
+
+        localStorage.setItem(
+          "buildrisk_repo",
+          connectedCommitData.repository || ""
+        );
+
+        localStorage.setItem(
+          "buildrisk_repo_url",
+          connectedCommitData.repo_url || ""
+        );
+      }
+
+      if (connectedPrediction) {
+        localStorage.setItem(
+          "buildrisk_prediction",
+          JSON.stringify(connectedPrediction)
+        );
+      }
+    }
+
+
     function clearPredictionOutput() {
+      connectedPrediction = null;
+      localStorage.removeItem("buildrisk_prediction");
+
       document.getElementById("riskScore").innerText = "--";
       document.getElementById("riskLevel").innerText = "Waiting";
       document.getElementById("predictionText").innerText = "Click Predict Risk";
@@ -1152,6 +1185,40 @@
     }
 
 
+    function restoreSavedState() {
+      const savedCommit = localStorage.getItem("buildrisk_commit");
+      const savedPrediction = localStorage.getItem("buildrisk_prediction");
+      const savedRepoUrl = localStorage.getItem("buildrisk_repo_url");
+
+      if (savedRepoUrl) {
+        document.getElementById("github_repo_url").value = savedRepoUrl;
+      }
+
+      if (savedCommit) {
+        connectedCommitData = JSON.parse(savedCommit);
+
+        updateFetchedCommitFeatures(connectedCommitData);
+        updatePostBuildEvidence(connectedCommitData);
+
+        setConnectionStatus("connected", "Connected");
+
+        document.getElementById("predictBtn").disabled = false;
+
+        document.getElementById("predictionText").innerText =
+          "Repository connected. Click Predict Risk.";
+      }
+
+      if (savedPrediction) {
+        connectedPrediction = JSON.parse(savedPrediction);
+
+        renderPrediction(connectedPrediction);
+        fillFeedbackForm();
+
+        document.getElementById("feedbackBtn").disabled = false;
+      }
+    }
+
+
     async function connectGithubRepo() {
       const connectBtn = document.getElementById("connectBtn");
       const predictBtn = document.getElementById("predictBtn");
@@ -1175,7 +1242,7 @@
       };
 
       try {
-        const response = await fetch("http://127.0.0.1:8000/connect-github-repo", {
+        const response = await fetch(`${API_BASE}/connect-github-repo`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data)
@@ -1201,6 +1268,10 @@
         document.getElementById("predictionText").innerText =
           "Repository connected. Click Predict Risk.";
 
+        saveState();
+        await loadHistory();
+        startAutoFetchWatcher();
+
       } catch (error) {
         setConnectionStatus("failed", "Connection Failed");
         alert("Unable to connect repository. Check API is running.");
@@ -1208,6 +1279,67 @@
         connectBtn.disabled = false;
         connectBtn.innerText = "Connect & Fetch Repository";
       }
+    }
+
+
+    async function autoFetchLatestCommit() {
+      if (!connectedCommitData) {
+        return;
+      }
+
+      const data = {
+        repo_url: document.getElementById("github_repo_url").value.trim(),
+        github_token: document.getElementById("github_token").value.trim()
+      };
+
+      try {
+        const response = await fetch(`${API_BASE}/connect-github-repo`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.error) {
+          return;
+        }
+
+        const latestCommit = result.commit_analysis;
+
+        if (latestCommit.commit_id !== connectedCommitData.commit_id) {
+          connectedCommitData = latestCommit;
+          connectedPrediction = null;
+
+          updateFetchedCommitFeatures(connectedCommitData);
+          updatePostBuildEvidence(connectedCommitData);
+          clearPredictionOutput();
+
+          document.getElementById("predictBtn").disabled = false;
+          document.getElementById("feedbackBtn").disabled = true;
+
+          document.getElementById("predictionText").innerText =
+            "New commit detected. Click Predict Risk.";
+
+          saveState();
+          await loadHistory();
+        }
+
+      } catch (error) {
+        console.log("Auto fetch failed");
+      }
+    }
+
+
+    function startAutoFetchWatcher() {
+      if (autoFetchTimer) {
+        clearInterval(autoFetchTimer);
+      }
+
+      autoFetchTimer = setInterval(
+        autoFetchLatestCommit,
+        30000
+      );
     }
 
 
@@ -1224,7 +1356,7 @@
       predictBtn.innerText = "Predicting...";
 
       try {
-        const response = await fetch("http://127.0.0.1:8000/predict-connected-repo", {
+        const response = await fetch(`${API_BASE}/predict-connected-repo`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(connectedCommitData)
@@ -1244,6 +1376,7 @@
 
         feedbackBtn.disabled = false;
 
+        saveState();
         await loadHistory();
 
       } catch (error) {
@@ -1269,6 +1402,7 @@
       feedbackBtn.innerText = "Submitting...";
 
       const data = {
+        repository: connectedCommitData.repository || "",
         commit_id: document.getElementById("feedback_commit_id").value,
         predicted_risk_score: Number(document.getElementById("feedback_risk_score").value),
         predicted_risk_level: document.getElementById("feedback_risk_level").value,
@@ -1278,7 +1412,7 @@
       };
 
       try {
-        const response = await fetch("http://127.0.0.1:8000/post-build-feedback", {
+        const response = await fetch(`${API_BASE}/post-build-feedback`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data)
@@ -1300,7 +1434,15 @@
 
     async function loadHistory() {
       try {
-        const response = await fetch("http://127.0.0.1:8000/history");
+        const repo =
+          connectedCommitData?.repository ||
+          localStorage.getItem("buildrisk_repo") ||
+          "";
+
+        const response = await fetch(
+          `${API_BASE}/history?repository=${encodeURIComponent(repo)}`
+        );
+
         const data = await response.json();
 
         historyData = data.history.reverse();
@@ -1338,7 +1480,8 @@
       document.getElementById("historyBody").innerHTML =
         html || "<tr><td colspan='5'>No history available</td></tr>";
 
-      const totalPages = Math.max(1, Math.ceil(historyData.length / historyPageSize));
+      const totalPages =
+        Math.max(1, Math.ceil(historyData.length / historyPageSize));
 
       document.getElementById("historyPageText").innerText =
         `Page ${historyPage} of ${totalPages}`;
@@ -1346,7 +1489,8 @@
 
 
     function nextHistoryPage() {
-      const totalPages = Math.max(1, Math.ceil(historyData.length / historyPageSize));
+      const totalPages =
+        Math.max(1, Math.ceil(historyData.length / historyPageSize));
 
       if (historyPage < totalPages) {
         historyPage++;
@@ -1363,8 +1507,9 @@
     }
 
 
+    restoreSavedState();
     loadHistory();
-
+    startAutoFetchWatcher();
   </script>
   
   </body>

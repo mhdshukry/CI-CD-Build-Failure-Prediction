@@ -1,9 +1,12 @@
+from dotenv import load_dotenv
 import pandas as pd
 import requests
 import os
 import time
 
-GITHUB_TOKEN = "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"
+load_dotenv()
+
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "")
 
 headers = {
     "Authorization": f"token {GITHUB_TOKEN}",

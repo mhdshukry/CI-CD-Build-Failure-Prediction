@@ -13,7 +13,7 @@ from github_analyzer.repository_analyzer import analyze_github_repository
 app = FastAPI(
     title="CI/CD Build Failure Risk Prediction API",
     description="GitHub-based AI system for CI/CD build failure risk prediction",
-    version="7.0"
+    version="7.1"
 )
 
 
@@ -57,6 +57,7 @@ class ConnectedCommitData(BaseModel):
 
 class PostBuildFeedback(BaseModel):
     commit_id: str
+    repository: str = ""
     predicted_risk_score: float
     predicted_risk_level: str
     actual_result: str
@@ -64,7 +65,7 @@ class PostBuildFeedback(BaseModel):
     failed_step: str = ""
 
 
-def save_prediction_history(source, commit_id, result):
+def save_prediction_history(source, commit_id, repository, result):
     os.makedirs("history", exist_ok=True)
 
     file_path = "history/prediction_history.csv"
@@ -81,6 +82,7 @@ def save_prediction_history(source, commit_id, result):
             writer.writerow([
                 "timestamp",
                 "source",
+                "repository",
                 "commit_id",
                 "risk_score",
                 "risk_level",
@@ -93,6 +95,7 @@ def save_prediction_history(source, commit_id, result):
         writer.writerow([
             datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             source,
+            repository,
             commit_id,
             result.get("final_failure_risk_score"),
             result.get("risk_level"),
@@ -119,6 +122,7 @@ def save_post_build_feedback(data):
         if not file_exists:
             writer.writerow([
                 "timestamp",
+                "repository",
                 "commit_id",
                 "predicted_risk_score",
                 "predicted_risk_level",
@@ -129,6 +133,7 @@ def save_post_build_feedback(data):
 
         writer.writerow([
             datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            data.repository,
             data.commit_id,
             data.predicted_risk_score,
             data.predicted_risk_level,
@@ -142,17 +147,18 @@ def save_post_build_feedback(data):
 def home():
     return {
         "message": "BuildRisk AI GitHub-based API is running",
-        "version": "7.0",
+        "version": "7.1",
         "workflow": {
             "step_1": "connect GitHub repository and fetch latest commit/build evidence",
             "step_2": "predict risk only after user clicks Predict Risk",
             "step_3": "save prediction history after prediction",
-            "step_4": "submit post-build feedback for learning"
+            "step_4": "show repository-specific prediction history",
+            "step_5": "submit post-build feedback for learning"
         },
         "endpoints": [
             "/connect-github-repo",
             "/predict-connected-repo",
-            "/history",
+            "/history?repository=owner/repo",
             "/post-build-feedback"
         ]
     }
@@ -181,9 +187,12 @@ def predict_connected_repo(data: ConnectedCommitData):
 
     prediction = predict_build_risk(commit_data)
 
+    prediction["repository"] = commit_data.get("repository", "")
+
     save_prediction_history(
         "github-repo",
         commit_data.get("commit_id", "unknown"),
+        commit_data.get("repository", ""),
         prediction
     )
 
@@ -194,7 +203,7 @@ def predict_connected_repo(data: ConnectedCommitData):
 
 
 @app.get("/history")
-def get_prediction_history():
+def get_prediction_history(repository: str = ""):
     file_path = "history/prediction_history.csv"
 
     if not os.path.exists(file_path):
@@ -208,7 +217,8 @@ def get_prediction_history():
         reader = csv.DictReader(file)
 
         for row in reader:
-            history.append(row)
+            if repository == "" or row.get("repository", "") == repository:
+                history.append(row)
 
     return {
         "history": history[-100:]
