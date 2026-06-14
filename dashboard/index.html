@@ -7,16 +7,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap');
 
     :root {
       --bg: #172121;
       --lime: #D2FF28;
       --white: #F0EFF4;
       --muted: #9aa6a3;
-      --dark2: #0d1717;
+      --dark: #0d1717;
+      --card: #1f2d2d;
       --line: rgba(240, 239, 244, .12);
       --cyan: #64ffda;
+      --red: #ff5c5c;
+      --orange: #ffb84d;
     }
 
     * {
@@ -26,42 +29,43 @@
 
     body {
       margin: 0;
-      background:
-        radial-gradient(circle at 5% 0%, rgba(210, 255, 40, .17), transparent 28%),
-        radial-gradient(circle at 95% 0%, rgba(100, 255, 218, .12), transparent 24%),
-        linear-gradient(135deg, #172121, #091010 75%);
       color: var(--white);
+      background:
+        radial-gradient(circle at 5% 0%, rgba(210, 255, 40, .18), transparent 28%),
+        radial-gradient(circle at 95% 0%, rgba(100, 255, 218, .12), transparent 25%),
+        linear-gradient(135deg, #172121, #071111 80%);
     }
 
     .page {
-      max-width: 1500px;
+      max-width: 1550px;
       margin: auto;
       padding: 16px;
     }
 
     .nav {
-      height: 60px;
+      min-height: 64px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 18px;
-      border-radius: 20px;
+      gap: 14px;
+      padding: 14px 20px;
+      border-radius: 22px;
       background: rgba(31, 45, 45, .9);
       border: 1px solid var(--line);
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 13px;
     }
 
     .logo {
-      width: 40px;
-      height: 40px;
-      border-radius: 13px;
-      background: var(--lime);
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--lime), var(--cyan));
       color: var(--bg);
       display: grid;
       place-items: center;
@@ -70,7 +74,7 @@
 
     .brand h1 {
       margin: 0;
-      font-size: 20px;
+      font-size: 21px;
       font-weight: 900;
     }
 
@@ -82,38 +86,39 @@
 
     .api {
       color: var(--lime);
-      border: 1px solid rgba(210, 255, 40, .32);
-      background: rgba(210, 255, 40, .08);
-      padding: 9px 14px;
+      background: rgba(210, 255, 40, .1);
+      border: 1px solid rgba(210, 255, 40, .3);
+      padding: 9px 15px;
       border-radius: 999px;
       font-size: 12px;
       font-weight: 900;
     }
 
-    .top-summary {
+    .top {
       display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 12px;
-      margin-bottom: 12px;
+      grid-template-columns: 1fr 330px;
+      gap: 14px;
+      margin-bottom: 14px;
     }
 
     .hero,
-    .card {
-      border-radius: 22px;
-      background: linear-gradient(180deg, rgba(31, 45, 45, .96), rgba(17, 27, 27, .96));
+    .card,
+    .kpi {
+      background: linear-gradient(180deg, rgba(31, 45, 45, .96), rgba(12, 22, 22, .96));
       border: 1px solid var(--line);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, .24);
     }
 
     .hero {
-      padding: 20px;
-      min-height: 135px;
+      border-radius: 26px;
+      padding: 24px;
     }
 
     .hero h2 {
       margin: 0;
-      font-size: 32px;
-      line-height: 1.04;
-      letter-spacing: -1.2px;
+      font-size: 36px;
+      line-height: 1;
+      letter-spacing: -1.4px;
       font-weight: 900;
     }
 
@@ -122,11 +127,10 @@
     }
 
     .hero p {
-      margin: 9px 0 0;
+      max-width: 900px;
       color: var(--muted);
-      font-size: 13.5px;
-      line-height: 1.55;
-      max-width: 850px;
+      font-size: 14px;
+      line-height: 1.6;
     }
 
     .kpis {
@@ -136,10 +140,8 @@
     }
 
     .kpi {
-      border-radius: 18px;
-      padding: 14px;
-      background: rgba(31, 45, 45, .96);
-      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 15px;
     }
 
     .kpi small {
@@ -150,67 +152,101 @@
 
     .kpi strong {
       display: block;
-      margin-top: 4px;
       color: var(--lime);
-      font-size: 20px;
-      font-weight: 900;
+      font-size: 22px;
+      margin-top: 5px;
     }
 
     .main {
       display: grid;
-      grid-template-columns: 430px 1fr;
-      gap: 12px;
+      grid-template-columns: 470px 1fr;
+      gap: 14px;
       align-items: start;
     }
 
     .card {
-      padding: 16px;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, .2);
-    }
-
-    .card-section,
-    .history-section {
-      margin-top: 12px;
+      border-radius: 24px;
+      padding: 18px;
+      margin-bottom: 14px;
     }
 
     .card-head {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
     }
 
     .card-head h3 {
       margin: 0;
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 900;
     }
 
     .badge {
       background: var(--lime);
       color: var(--bg);
+      padding: 7px 12px;
       border-radius: 999px;
-      padding: 7px 11px;
       font-size: 11px;
       font-weight: 900;
+    }
+
+    .badge.dark {
+      background: rgba(240, 239, 244, .08);
+      color: var(--white);
+      border: 1px solid var(--line);
+    }
+
+    .status {
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 900;
+      border: 1px solid var(--line);
+      background: rgba(240, 239, 244, .06);
+      color: var(--muted);
+    }
+
+    .status.connected {
+      color: var(--lime);
+      background: rgba(210, 255, 40, .1);
+      border-color: rgba(210, 255, 40, .3);
+    }
+
+    .status.failed {
+      color: var(--red);
+      background: rgba(255, 92, 92, .1);
+      border-color: rgba(255, 92, 92, .3);
+    }
+
+    .status.loading {
+      color: var(--orange);
+      background: rgba(255, 184, 77, .1);
+      border-color: rgba(255, 184, 77, .3);
     }
 
     .form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 9px;
+      gap: 10px;
     }
 
     .group {
-      margin-bottom: 7px;
+      margin-bottom: 8px;
+    }
+
+    .wide {
+      grid-column: 1/-1;
     }
 
     label {
       display: block;
       color: #c7d0cd;
-      font-size: 10.8px;
+      font-size: 11px;
       font-weight: 900;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }
 
     input,
@@ -218,18 +254,17 @@
     textarea {
       width: 100%;
       border: 1px solid rgba(240, 239, 244, .13);
-      background: var(--dark2);
+      background: var(--dark);
       color: var(--white);
-      border-radius: 13px;
-      padding: 10px 11px;
+      border-radius: 14px;
+      padding: 11px;
       outline: none;
-      font-size: 12.8px;
+      font-size: 13px;
       font-weight: 700;
     }
 
     textarea {
-      min-height: 52px;
-      max-height: 64px;
+      height: 68px;
       resize: none;
     }
 
@@ -240,50 +275,82 @@
       box-shadow: 0 0 0 3px rgba(210, 255, 40, .12);
     }
 
-    .wide {
-      grid-column: 1/-1;
-    }
-
-    .buttons {
-      display: flex;
-      gap: 9px;
-      margin-top: 4px;
-    }
-
     button {
       border: none;
       cursor: pointer;
-      border-radius: 14px;
-      padding: 12px 15px;
-      font-size: 12.8px;
+      border-radius: 15px;
+      padding: 13px;
+      font-size: 13px;
       font-weight: 900;
     }
 
+    button:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
     .primary {
-      flex: 1;
+      width: 100%;
       background: linear-gradient(135deg, var(--lime), var(--cyan));
       color: var(--bg);
     }
 
     .secondary {
+      width: 100%;
       background: rgba(240, 239, 244, .08);
-      color: var(--white);
       border: 1px solid var(--line);
+      color: var(--white);
+    }
+
+    .commit-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 9px;
+      margin-top: 9px;
+    }
+
+    .commit-mini {
+      border-radius: 15px;
+      background: var(--dark);
+      border: 1px solid var(--line);
+      padding: 11px;
+    }
+
+    .commit-mini small {
+      display: block;
+      color: var(--muted);
+      font-size: 10.5px;
+      font-weight: 900;
+    }
+
+    .commit-mini strong {
+      display: block;
+      margin-top: 4px;
+      color: var(--cyan);
+      font-size: 16px;
+      font-weight: 900;
     }
 
     .output-top {
       display: grid;
-      grid-template-columns: 245px 1fr;
+      grid-template-columns: 255px 1fr;
       gap: 12px;
       margin-bottom: 12px;
     }
 
     .score-card {
-      min-height: 215px;
+      min-height: 225px;
       border-radius: 22px;
       background:
-        radial-gradient(circle at top, rgba(210, 255, 40, .42), transparent 52%),
-        var(--dark2);
+        radial-gradient(circle at top, rgba(210, 255, 40, .42), transparent 55%),
+        var(--dark);
       border: 1px solid rgba(210, 255, 40, .25);
       display: flex;
       flex-direction: column;
@@ -300,20 +367,20 @@
     }
 
     .score {
-      font-size: 48px;
-      font-weight: 900;
+      font-size: 52px;
       color: var(--lime);
-      margin: 7px 0;
+      font-weight: 900;
+      margin: 8px 0;
       letter-spacing: -2px;
     }
 
     .level {
+      padding: 8px 13px;
       border-radius: 999px;
-      padding: 7px 12px;
       background: rgba(210, 255, 40, .1);
       border: 1px solid rgba(210, 255, 40, .25);
       color: var(--lime);
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 900;
     }
 
@@ -332,24 +399,26 @@
     }
 
     .metric,
-    .evidence {
+    .evidence,
+    .commit-box {
       border-radius: 16px;
-      background: var(--dark2);
+      background: var(--dark);
       border: 1px solid var(--line);
       padding: 12px;
     }
 
     .metric small,
-    .evidence small {
+    .evidence small,
+    .commit-box small {
       color: var(--muted);
-      font-size: 10.8px;
+      font-size: 11px;
       font-weight: 900;
     }
 
     .metric strong {
       display: block;
       color: var(--cyan);
-      margin-top: 4px;
+      margin-top: 5px;
       font-size: 18px;
       font-weight: 900;
     }
@@ -360,15 +429,17 @@
       gap: 9px;
     }
 
-    .evidence.full {
+    .evidence.full,
+    .commit-box {
       margin-top: 9px;
     }
 
-    .evidence p {
-      margin: 4px 0 0;
+    .evidence p,
+    .commit-box p {
+      margin: 5px 0 0;
       color: #d8dfdd;
       font-size: 12.8px;
-      line-height: 1.35;
+      line-height: 1.4;
     }
 
     .detail-grid {
@@ -378,11 +449,11 @@
     }
 
     .detail {
-      min-height: 128px;
+      min-height: 130px;
       border-radius: 18px;
-      background: var(--dark2);
+      background: var(--dark);
       border: 1px solid var(--line);
-      padding: 13px;
+      padding: 14px;
       position: relative;
       overflow: hidden;
     }
@@ -392,46 +463,39 @@
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
       height: 3px;
+      width: 100%;
       background: linear-gradient(90deg, var(--lime), var(--cyan));
     }
 
     .detail h4 {
       margin: 0 0 8px;
-      font-size: 12.5px;
-      font-weight: 900;
       color: var(--lime);
+      font-size: 13px;
+      font-weight: 900;
     }
 
     ul {
       margin: 0;
-      padding-left: 17px;
+      padding-left: 18px;
       color: #cbd5d2;
-      font-size: 12.3px;
+      font-size: 12.5px;
       line-height: 1.55;
     }
 
-    .commit-box {
+    .history-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
       margin-top: 12px;
-      border-radius: 18px;
-      background: rgba(13, 23, 23, .8);
+    }
+
+    .history-controls button {
+      padding: 9px 12px;
+      background: rgba(240, 239, 244, .08);
+      color: var(--white);
       border: 1px solid var(--line);
-      padding: 12px;
-    }
-
-    .commit-box small {
-      display: block;
-      color: var(--muted);
-      font-size: 10.8px;
-      font-weight: 900;
-    }
-
-    .commit-box p {
-      margin: 5px 0 0;
-      color: #d8dfdd;
-      font-size: 12.5px;
-      line-height: 1.45;
     }
 
     .history-table {
@@ -474,12 +538,11 @@
       font-size: 12px;
       font-weight: 900;
       margin-top: 10px;
-      line-height: 1.5;
     }
 
     @media(max-width:1200px) {
 
-      .top-summary,
+      .top,
       .main,
       .output-top {
         grid-template-columns: 1fr;
@@ -495,18 +558,19 @@
         height: auto;
         align-items: flex-start;
         flex-direction: column;
-        padding: 14px;
       }
 
       .hero h2 {
-        font-size: 26px;
+        font-size: 28px;
       }
 
       .kpis,
       .form-grid,
       .metric-grid,
       .evidence-grid,
-      .detail-grid {
+      .detail-grid,
+      .commit-metrics,
+      .buttons {
         grid-template-columns: 1fr;
       }
     }
@@ -514,251 +578,234 @@
 </head>
 
 <body>
+
   <div class="page">
 
     <nav class="nav">
+
       <div class="brand">
-        <div class="logo">AI</div>
+
+        <div class="logo">
+          AI
+        </div>
+
         <div>
           <h1>BuildRisk AI</h1>
-          <p>CI/CD failure risk prediction system</p>
+          <p>GitHub-based CI/CD risk prediction platform</p>
         </div>
+
       </div>
-      <div class="api">● API LIVE</div>
+
+      <div class="api" id="apiStatus">
+        ● API LIVE
+      </div>
+
     </nav>
 
-    <section class="top-summary">
+
+    <section class="top">
+
       <div class="hero">
-        <h2>Predict <span>CI/CD Build Risk</span> Before Execution</h2>
+
+        <h2>
+          Predict <span>GitHub Build Failure Risk</span> Before CI Runs
+        </h2>
+
         <p>
-          Hybrid ML and rule-based CI/CD analysis with build error evidence, risky file detection,
-          developer guidance and post-build learning readiness.
+          Connect any public or private GitHub repository. BuildRisk AI fetches
+          latest commit changes, previous GitHub Actions evidence, post-build logs,
+          risky files, and generates explainable failure-risk predictions.
         </p>
+
       </div>
 
       <div class="kpis">
-        <div class="kpi"><small>Dataset</small><strong>2290</strong></div>
-        <div class="kpi"><small>Failures</small><strong>319</strong></div>
-        <div class="kpi"><small>Best Model</small><strong>XGB</strong></div>
-        <div class="kpi"><small>ROC-AUC</small><strong>77.6%</strong></div>
+
+        <div class="kpi">
+          <small>Dataset</small>
+          <strong>2290</strong>
+        </div>
+
+        <div class="kpi">
+          <small>Failures</small>
+          <strong>319</strong>
+        </div>
+
+        <div class="kpi">
+          <small>Best Model</small>
+          <strong>XGB</strong>
+        </div>
+
+        <div class="kpi">
+          <small>ROC-AUC</small>
+          <strong>77.6%</strong>
+        </div>
+
       </div>
+
     </section>
+
 
     <section class="main">
 
+      <!-- LEFT COLUMN -->
       <div>
+
+        <!-- GITHUB CONNECTION -->
         <div class="card">
+
           <div class="card-head">
-            <h3>Auto Latest Commit</h3>
-            <span class="badge">Auto Fetch</span>
+            <h3>GitHub Repository Connection</h3>
+            <span class="status" id="connectionStatus">Not Connected</span>
           </div>
 
           <div class="form-grid">
+
             <div class="group wide">
-              <label>Local Repository Path</label>
-              <input id="repo_path" value="D:\CI-CD-Build-Failure-Prediction">
-            </div>
-
-            <div class="group">
-              <label>Previous Build Status</label>
-              <select id="auto_previous_build_status">
-                <option value="failure">Failure</option>
-                <option value="success">Success</option>
-                <option value="unknown">Unknown</option>
-              </select>
-            </div>
-
-            <div class="group">
-              <label>Previous Failed Step</label>
-              <input id="auto_previous_failed_step" value="Run tests">
+              <label>GitHub Repository URL</label>
+              <input id="github_repo_url" value="https://github.com/pallets/flask">
             </div>
 
             <div class="group wide">
-              <label>Previous Error Message</label>
-              <textarea id="auto_previous_error_message">ModuleNotFoundError: No module named requests</textarea>
+              <label>GitHub Token - private repository only</label>
+              <input id="github_token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxx">
             </div>
+
           </div>
 
           <div class="buttons">
-            <button class="primary" onclick="analyzeLatestCommit()">Analyze Latest Commit Automatically</button>
+
+            <button id="connectBtn" class="primary" onclick="connectGithubRepo()">
+              Connect & Fetch Repository
+            </button>
+
+            <button id="predictBtn" class="secondary" onclick="predictConnectedRepo()" disabled>
+              Predict Risk
+            </button>
+
           </div>
+
         </div>
 
-        <div class="card card-section">
-          <div class="card-head">
-            <h3>Manual Commit Input</h3>
-            <span class="badge">Manual</span>
-          </div>
 
-          <div class="form-grid">
-            <div class="group"><label>Files Changed</label><input id="files_changed" type="number" value="35"></div>
-            <div class="group"><label>Total Changes</label><input id="total_changes" type="number" value="540"></div>
-            <div class="group"><label>Lines Added</label><input id="lines_added" type="number" value="420"></div>
-            <div class="group"><label>Lines Deleted</label><input id="lines_deleted" type="number" value="120"></div>
-
-            <div class="group"><label>Dependency File</label><select id="dependency_file_changed">
-                <option value="1">Changed</option>
-                <option value="0">Not Changed</option>
-              </select></div>
-            <div class="group"><label>Test File</label><select id="test_file_changed">
-                <option value="0">Not Changed</option>
-                <option value="1">Changed</option>
-              </select></div>
-            <div class="group"><label>Workflow File</label><select id="workflow_changed">
-                <option value="1">Changed</option>
-                <option value="0">Not Changed</option>
-              </select></div>
-            <div class="group"><label>Source File</label><select id="source_file_changed">
-                <option value="1">Changed</option>
-                <option value="0">Not Changed</option>
-              </select></div>
-
-            <div class="group wide">
-              <label>Changed Files</label>
-              <textarea
-                id="changed_files">requirements.txt, .github/workflows/ci.yml, src/main.py, tests/test_main.py</textarea>
-            </div>
-
-            <div class="group"><label>Previous Build Status</label><select id="previous_build_status">
-                <option value="failure">Failure</option>
-                <option value="success">Success</option>
-                <option value="unknown">Unknown</option>
-              </select></div>
-
-            <div class="group"><label>Previous Failed Step</label><input id="previous_failed_step" value="Run tests">
-            </div>
-
-            <div class="group wide">
-              <label>Previous Error Message</label>
-              <textarea id="previous_error_message">ModuleNotFoundError: No module named requests</textarea>
-            </div>
-          </div>
-
-          <div class="buttons">
-            <button class="primary" onclick="predictRisk()">Analyze Build Risk</button>
-            <button class="secondary" onclick="resetForm()">Reset</button>
-          </div>
-        </div>
-      </div>
-
-      <div>
+        <!-- AUTO FETCHED COMMIT FEATURES -->
         <div class="card">
+
           <div class="card-head">
-            <h3>Prediction Output</h3>
-            <span class="badge">AI Result</span>
+            <h3>Auto-Fetched Commit Features</h3>
+            <span class="badge dark">Read Only</span>
           </div>
 
-          <div class="output-top">
-            <div class="score-card">
-              <small>Final Failure Risk</small>
-              <div class="score" id="riskScore">--</div>
-              <div class="level" id="riskLevel">Waiting</div>
-              <div class="prediction" id="predictionText">Submit commit data</div>
+          <div class="commit-metrics">
+
+            <div class="commit-mini">
+              <small>Files Changed</small>
+              <strong id="filesChanged">--</strong>
             </div>
 
-            <div>
-              <div class="metric-grid">
-                <div class="metric"><small>ML Probability</small><strong id="mlScore">--</strong></div>
-                <div class="metric"><small>Rule Score</small><strong id="ruleScore">--</strong></div>
-                <div class="metric"><small>Error Type</small><strong id="errorCategory">--</strong></div>
-              </div>
-
-              <div class="evidence-grid">
-                <div class="evidence"><small>Previous Status</small>
-                  <p id="prevStatus">--</p>
-                </div>
-                <div class="evidence"><small>Failed Step</small>
-                  <p id="prevStep">--</p>
-                </div>
-              </div>
-
-              <div class="evidence full">
-                <small>Previous Error Message</small>
-                <p id="prevError">--</p>
-              </div>
-
-              <div class="commit-box">
-                <small>Commit ID</small>
-                <p id="commitId">--</p>
-              </div>
-
-              <div class="commit-box">
-                <small>Commit Message</small>
-                <p id="commitMessage">--</p>
-              </div>
+            <div class="commit-mini">
+              <small>Lines Added</small>
+              <strong id="linesAdded">--</strong>
             </div>
+
+            <div class="commit-mini">
+              <small>Lines Deleted</small>
+              <strong id="linesDeleted">--</strong>
+            </div>
+
+            <div class="commit-mini">
+              <small>Total Changes</small>
+              <strong id="totalChanges">--</strong>
+            </div>
+
+            <div class="commit-mini">
+              <small>Dependency</small>
+              <strong id="dependencyChanged">--</strong>
+            </div>
+
+            <div class="commit-mini">
+              <small>Workflow</small>
+              <strong id="workflowChanged">--</strong>
+            </div>
+
+            <div class="commit-mini">
+              <small>Test Files</small>
+              <strong id="testChanged">--</strong>
+            </div>
+
+            <div class="commit-mini">
+              <small>Source Files</small>
+              <strong id="sourceChanged">--</strong>
+            </div>
+
           </div>
 
-          <div class="detail-grid">
-            <div class="detail">
-              <h4>Risky Files</h4>
-              <ul id="riskyFiles">
-                <li>No risky files detected yet</li>
-              </ul>
-            </div>
-
-            <div class="detail">
-              <h4>Post-Build Learning</h4>
-              <ul id="learning">
-                <li>Waiting for prediction</li>
-              </ul>
-            </div>
-
-            <div class="detail">
-              <h4>AI Explanation</h4>
-              <ul id="reasons">
-                <li>No prediction yet</li>
-              </ul>
-            </div>
-
-            <div class="detail">
-              <h4>Suggested Fixes</h4>
-              <ul id="suggestions">
-                <li>No suggestions yet</li>
-              </ul>
-            </div>
+          <div class="commit-box">
+            <small>Commit ID</small>
+            <p id="commitId">--</p>
           </div>
+
+          <div class="commit-box">
+            <small>Commit Message</small>
+            <p id="commitMessage">--</p>
+          </div>
+
+          <div class="commit-box">
+            <small>Changed Files</small>
+            <p id="changedFiles">--</p>
+          </div>
+
         </div>
 
-        <div class="card history-section">
+
+        <!-- POST BUILD EVIDENCE -->
+        <div class="card">
+
           <div class="card-head">
-            <h3>Prediction History</h3>
-            <span class="badge">Learning Log</span>
+            <h3>Post-Build Evidence</h3>
+            <span class="badge dark">GitHub Actions</span>
           </div>
 
-          <table class="history-table">
-            <thead>
-              <tr>
-                <th>Time</th>
-                <th>Source</th>
-                <th>Risk</th>
-                <th>Level</th>
-                <th>Error</th>
-              </tr>
-            </thead>
-            <tbody id="historyBody">
-              <tr>
-                <td colspan="5">No history available</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="evidence-grid">
+
+            <div class="evidence">
+              <small>Previous Build Status</small>
+              <p id="prevStatus">--</p>
+            </div>
+
+            <div class="evidence">
+              <small>Failed Step / Workflow</small>
+              <p id="prevStep">--</p>
+            </div>
+
+          </div>
+
+          <div class="evidence full">
+            <small>Previous Error Message / Evidence</small>
+            <p id="prevError">--</p>
+          </div>
+
         </div>
 
-        <div class="card history-section">
+
+        <!-- POST BUILD FEEDBACK -->
+        <div class="card">
+
           <div class="card-head">
             <h3>Post-Build Feedback</h3>
             <span class="badge">Learning</span>
           </div>
 
           <div class="form-grid">
+
             <div class="group wide">
               <label>Commit ID</label>
-              <input id="feedback_commit_id" placeholder="Commit ID">
+              <input id="feedback_commit_id" placeholder="Auto-filled commit ID">
             </div>
 
             <div class="group">
               <label>Predicted Risk Score</label>
-              <input id="feedback_risk_score" type="number" placeholder="82.62">
+              <input id="feedback_risk_score" type="number" placeholder="Auto-filled risk score">
             </div>
 
             <div class="group">
@@ -775,156 +822,451 @@
               <select id="feedback_actual_result">
                 <option value="failure">Failure</option>
                 <option value="success">Success</option>
+                <option value="unknown">Unknown</option>
               </select>
             </div>
 
             <div class="group">
               <label>Failed Step</label>
-              <input id="feedback_failed_step" placeholder="Run tests">
+              <input id="feedback_failed_step" placeholder="Auto-filled failed step">
             </div>
 
             <div class="group wide">
               <label>Actual Error Message</label>
-              <textarea id="feedback_error_message" placeholder="Paste actual CI/CD error message"></textarea>
+              <textarea id="feedback_error_message" placeholder="Auto-filled previous build evidence"></textarea>
             </div>
+
           </div>
 
-          <div class="buttons">
-            <button class="primary" onclick="submitFeedback()">Submit Post-Build Feedback</button>
-          </div>
+          <button id="feedbackBtn" class="primary" onclick="submitFeedback()" disabled>
+            Submit Post-Build Feedback
+          </button>
 
           <p id="feedbackStatus"></p>
+
         </div>
+
+      </div>
+
+
+      <!-- RIGHT COLUMN -->
+      <div>
+
+        <!-- PREDICTION OUTPUT -->
+        <div class="card">
+
+          <div class="card-head">
+            <h3>Prediction Output</h3>
+            <span class="badge">AI Result</span>
+          </div>
+
+          <div class="output-top">
+
+            <div class="score-card">
+
+              <small>Final Failure Risk</small>
+
+              <div class="score" id="riskScore">
+                --
+              </div>
+
+              <div class="level" id="riskLevel">
+                Waiting
+              </div>
+
+              <div class="prediction" id="predictionText">
+                Connect repository first
+              </div>
+
+            </div>
+
+            <div>
+
+              <div class="metric-grid">
+
+                <div class="metric">
+                  <small>ML Probability</small>
+                  <strong id="mlScore">--</strong>
+                </div>
+
+                <div class="metric">
+                  <small>Rule Score</small>
+                  <strong id="ruleScore">--</strong>
+                </div>
+
+                <div class="metric">
+                  <small>Error Type</small>
+                  <strong id="errorCategory">--</strong>
+                </div>
+
+              </div>
+
+              <div class="detail-grid">
+
+                <div class="detail">
+                  <h4>Risky Files</h4>
+                  <ul id="riskyFiles">
+                    <li>No risky files detected yet</li>
+                  </ul>
+                </div>
+
+                <div class="detail">
+                  <h4>Post-Build Learning</h4>
+                  <ul id="learning">
+                    <li>Waiting for prediction</li>
+                  </ul>
+                </div>
+
+                <div class="detail">
+                  <h4>AI Explanation</h4>
+                  <ul id="reasons">
+                    <li>No prediction yet</li>
+                  </ul>
+                </div>
+
+                <div class="detail">
+                  <h4>Suggested Fixes</h4>
+                  <ul id="suggestions">
+                    <li>No suggestions yet</li>
+                  </ul>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- HISTORY WITH PAGINATION -->
+        <div class="card">
+
+          <div class="card-head">
+            <h3>Prediction History</h3>
+            <span class="badge">Learning Log</span>
+          </div>
+
+          <table class="history-table">
+
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Source</th>
+                <th>Risk</th>
+                <th>Level</th>
+                <th>Error</th>
+              </tr>
+            </thead>
+
+            <tbody id="historyBody">
+              <tr>
+                <td colspan="5">No history available</td>
+              </tr>
+            </tbody>
+
+          </table>
+
+          <div class="history-controls">
+            <button onclick="previousHistoryPage()">Previous</button>
+            <span id="historyPageText">Page 1</span>
+            <button onclick="nextHistoryPage()">Next</button>
+          </div>
+
+        </div>
+
       </div>
 
     </section>
+
   </div>
-
   <script>
-    function renderPrediction(result) {
-      document.getElementById("riskScore").innerText = result.final_failure_risk_score + "%";
-      document.getElementById("riskLevel").innerText = result.risk_level;
-      document.getElementById("predictionText").innerText = result.prediction;
-      document.getElementById("mlScore").innerText = result.ml_failure_probability + "%";
-      document.getElementById("ruleScore").innerText = result.rule_based_risk_score + "%";
-      document.getElementById("errorCategory").innerText = result.error_category;
+    let connectedCommitData = null;
+    let connectedPrediction = null;
 
-      document.getElementById("prevStatus").innerText = result.previous_build_status;
-      document.getElementById("prevStep").innerText = result.previous_failed_step || "Not available";
-      document.getElementById("prevError").innerText = result.previous_error_message || "No previous error message";
+    let historyData = [];
+    let historyPage = 1;
+    const historyPageSize = 5;
+
+
+    function setConnectionStatus(type, text) {
+      const status = document.getElementById("connectionStatus");
+
+      status.className = "status";
+
+      if (type === "connected") {
+        status.classList.add("connected");
+      }
+
+      if (type === "failed") {
+        status.classList.add("failed");
+      }
+
+      if (type === "loading") {
+        status.classList.add("loading");
+      }
+
+      status.innerText = text;
+    }
+
+
+    function yesNo(value) {
+      return Number(value) === 1 ? "Changed" : "Not Changed";
+    }
+
+
+    function clearPredictionOutput() {
+      document.getElementById("riskScore").innerText = "--";
+      document.getElementById("riskLevel").innerText = "Waiting";
+      document.getElementById("predictionText").innerText = "Click Predict Risk";
+
+      document.getElementById("mlScore").innerText = "--";
+      document.getElementById("ruleScore").innerText = "--";
+      document.getElementById("errorCategory").innerText = "--";
 
       document.getElementById("riskyFiles").innerHTML =
-        result.risky_files.length ? result.risky_files.map(x => `<li>${x}</li>`).join("") : "<li>No risky files detected</li>";
+        "<li>No risky files detected yet</li>";
+
+      document.getElementById("learning").innerHTML =
+        "<li>Waiting for prediction</li>";
+
+      document.getElementById("reasons").innerHTML =
+        "<li>No prediction yet</li>";
+
+      document.getElementById("suggestions").innerHTML =
+        "<li>No suggestions yet</li>";
+    }
+
+
+    function updateFetchedCommitFeatures(commit) {
+      document.getElementById("filesChanged").innerText =
+        commit.files_changed ?? "--";
+
+      document.getElementById("linesAdded").innerText =
+        commit.lines_added ?? "--";
+
+      document.getElementById("linesDeleted").innerText =
+        commit.lines_deleted ?? "--";
+
+      document.getElementById("totalChanges").innerText =
+        commit.total_changes ?? "--";
+
+      document.getElementById("dependencyChanged").innerText =
+        yesNo(commit.dependency_file_changed);
+
+      document.getElementById("workflowChanged").innerText =
+        yesNo(commit.workflow_changed);
+
+      document.getElementById("testChanged").innerText =
+        yesNo(commit.test_file_changed);
+
+      document.getElementById("sourceChanged").innerText =
+        yesNo(commit.source_file_changed);
+
+      document.getElementById("commitId").innerText =
+        commit.commit_id || "--";
+
+      document.getElementById("commitMessage").innerText =
+        commit.commit_message || "--";
+
+      document.getElementById("changedFiles").innerText =
+        commit.changed_files || "No changed files";
+    }
+
+
+    function updatePostBuildEvidence(commit) {
+      document.getElementById("prevStatus").innerText =
+        commit.previous_build_status || "unknown";
+
+      document.getElementById("prevStep").innerText =
+        commit.previous_failed_step || "Not available";
+
+      document.getElementById("prevError").innerText =
+        commit.previous_error_message || "No previous error message";
+    }
+
+
+    function renderPrediction(result) {
+      document.getElementById("riskScore").innerText =
+        result.final_failure_risk_score + "%";
+
+      document.getElementById("riskLevel").innerText =
+        result.risk_level;
+
+      document.getElementById("predictionText").innerText =
+        result.prediction;
+
+      document.getElementById("mlScore").innerText =
+        result.ml_failure_probability + "%";
+
+      document.getElementById("ruleScore").innerText =
+        result.rule_based_risk_score + "%";
+
+      document.getElementById("errorCategory").innerText =
+        result.error_category;
+
+      document.getElementById("riskyFiles").innerHTML =
+        result.risky_files && result.risky_files.length
+          ? result.risky_files.map(x => `<li>${x}</li>`).join("")
+          : "<li>No risky files detected</li>";
 
       document.getElementById("learning").innerHTML =
         `<li>${result.post_build_learning_status}</li>`;
 
       document.getElementById("reasons").innerHTML =
-        result.reasons.map(x => `<li>${x}</li>`).join("");
+        result.reasons && result.reasons.length
+          ? result.reasons.map(x => `<li>${x}</li>`).join("")
+          : "<li>No reasons generated</li>";
 
       document.getElementById("suggestions").innerHTML =
-        result.suggestions.map(x => `<li>${x}</li>`).join("");
+        result.suggestions && result.suggestions.length
+          ? result.suggestions.map(x => `<li>${x}</li>`).join("")
+          : "<li>No suggestions generated</li>";
     }
 
-    async function predictRisk() {
-      const dependency = Number(document.getElementById("dependency_file_changed").value);
-      const test = Number(document.getElementById("test_file_changed").value);
-      const workflow = Number(document.getElementById("workflow_changed").value);
-      const source = Number(document.getElementById("source_file_changed").value);
-
-      const data = {
-        files_changed: Number(document.getElementById("files_changed").value),
-        lines_added: Number(document.getElementById("lines_added").value),
-        lines_deleted: Number(document.getElementById("lines_deleted").value),
-        total_changes: Number(document.getElementById("total_changes").value),
-        dependency_file_changed: dependency,
-        test_file_changed: test,
-        workflow_changed: workflow,
-        source_file_changed: source,
-        risk_file_count: dependency + test + workflow + source,
-        changed_files: document.getElementById("changed_files").value,
-        previous_build_status: document.getElementById("previous_build_status").value,
-        previous_error_message: document.getElementById("previous_error_message").value,
-        previous_failed_step: document.getElementById("previous_failed_step").value
-      };
-
-      const response = await fetch("http://127.0.0.1:8000/predict", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-
-      const result = await response.json();
-
-      document.getElementById("commitId").innerText = "Manual input";
-      document.getElementById("commitMessage").innerText = "Manual commit feature analysis";
-
-      renderPrediction(result);
-      fillFeedbackForm();
-      loadHistory();
-    }
-
-    async function analyzeLatestCommit() {
-      const data = {
-        repo_path: document.getElementById("repo_path").value,
-        previous_build_status: document.getElementById("auto_previous_build_status").value,
-        previous_error_message: document.getElementById("auto_previous_error_message").value,
-        previous_failed_step: document.getElementById("auto_previous_failed_step").value
-      };
-
-      const response = await fetch("http://127.0.0.1:8000/analyze-local-repo", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-
-      const result = await response.json();
-
-      if (result.error) {
-        alert(result.error);
-        return;
-      }
-
-      const commit = result.commit_analysis;
-      const prediction = result.prediction;
-
-      document.getElementById("files_changed").value = commit.files_changed;
-      document.getElementById("lines_added").value = commit.lines_added;
-      document.getElementById("lines_deleted").value = commit.lines_deleted;
-      document.getElementById("total_changes").value = commit.total_changes;
-      document.getElementById("dependency_file_changed").value = commit.dependency_file_changed;
-      document.getElementById("test_file_changed").value = commit.test_file_changed;
-      document.getElementById("workflow_changed").value = commit.workflow_changed;
-      document.getElementById("source_file_changed").value = commit.source_file_changed;
-      document.getElementById("changed_files").value = commit.changed_files;
-
-      document.getElementById("commitId").innerText = commit.commit_id;
-      document.getElementById("commitMessage").innerText = commit.commit_message;
-
-      renderPrediction(prediction);
-      fillFeedbackForm();
-      loadHistory();
-    }
 
     function fillFeedbackForm() {
       document.getElementById("feedback_commit_id").value =
-        document.getElementById("commitId").innerText;
+        connectedCommitData?.commit_id || "";
 
       document.getElementById("feedback_risk_score").value =
-        document.getElementById("riskScore").innerText.replace("%", "");
+        connectedPrediction?.final_failure_risk_score || "";
 
       document.getElementById("feedback_risk_level").value =
-        document.getElementById("riskLevel").innerText;
+        connectedPrediction?.risk_level || "Medium Risk";
+
+      const status =
+        connectedCommitData?.previous_build_status || "unknown";
+
+      document.getElementById("feedback_actual_result").value =
+        status === "success" ? "success" :
+          status === "failure" ? "failure" :
+            "unknown";
 
       document.getElementById("feedback_failed_step").value =
-        document.getElementById("prevStep").innerText;
+        connectedCommitData?.previous_failed_step || "";
 
       document.getElementById("feedback_error_message").value =
-        document.getElementById("prevError").innerText;
+        connectedCommitData?.previous_error_message || "";
     }
 
+
+    async function connectGithubRepo() {
+      const connectBtn = document.getElementById("connectBtn");
+      const predictBtn = document.getElementById("predictBtn");
+      const feedbackBtn = document.getElementById("feedbackBtn");
+
+      connectBtn.disabled = true;
+      predictBtn.disabled = true;
+      feedbackBtn.disabled = true;
+
+      connectBtn.innerText = "Fetching Repository...";
+      setConnectionStatus("loading", "Connecting...");
+
+      connectedCommitData = null;
+      connectedPrediction = null;
+
+      clearPredictionOutput();
+
+      const data = {
+        repo_url: document.getElementById("github_repo_url").value.trim(),
+        github_token: document.getElementById("github_token").value.trim()
+      };
+
+      try {
+        const response = await fetch("http://127.0.0.1:8000/connect-github-repo", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.error) {
+          setConnectionStatus("failed", "Connection Failed");
+          alert(result.error);
+          return;
+        }
+
+        connectedCommitData = result.commit_analysis;
+
+        updateFetchedCommitFeatures(connectedCommitData);
+        updatePostBuildEvidence(connectedCommitData);
+
+        setConnectionStatus("connected", "Connected");
+
+        predictBtn.disabled = false;
+
+        document.getElementById("predictionText").innerText =
+          "Repository connected. Click Predict Risk.";
+
+      } catch (error) {
+        setConnectionStatus("failed", "Connection Failed");
+        alert("Unable to connect repository. Check API is running.");
+      } finally {
+        connectBtn.disabled = false;
+        connectBtn.innerText = "Connect & Fetch Repository";
+      }
+    }
+
+
+    async function predictConnectedRepo() {
+      if (!connectedCommitData) {
+        alert("Please connect a GitHub repository first.");
+        return;
+      }
+
+      const predictBtn = document.getElementById("predictBtn");
+      const feedbackBtn = document.getElementById("feedbackBtn");
+
+      predictBtn.disabled = true;
+      predictBtn.innerText = "Predicting...";
+
+      try {
+        const response = await fetch("http://127.0.0.1:8000/predict-connected-repo", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(connectedCommitData)
+        });
+
+        const result = await response.json();
+
+        if (result.error) {
+          alert(result.error);
+          return;
+        }
+
+        connectedPrediction = result.prediction;
+
+        renderPrediction(connectedPrediction);
+        fillFeedbackForm();
+
+        feedbackBtn.disabled = false;
+
+        await loadHistory();
+
+      } catch (error) {
+        alert("Unable to predict risk. Check API is running.");
+      } finally {
+        predictBtn.disabled = false;
+        predictBtn.innerText = "Predict Risk";
+      }
+    }
+
+
     async function submitFeedback() {
+      if (!connectedCommitData || !connectedPrediction) {
+        alert("Please connect repository and predict risk first.");
+        return;
+      }
+
       fillFeedbackForm();
+
+      const feedbackBtn = document.getElementById("feedbackBtn");
+
+      feedbackBtn.disabled = true;
+      feedbackBtn.innerText = "Submitting...";
 
       const data = {
         commit_id: document.getElementById("feedback_commit_id").value,
@@ -935,52 +1277,96 @@
         failed_step: document.getElementById("feedback_failed_step").value
       };
 
-      const response = await fetch("http://127.0.0.1:8000/post-build-feedback", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
+      try {
+        const response = await fetch("http://127.0.0.1:8000/post-build-feedback", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
 
-      const result = await response.json();
+        const result = await response.json();
 
-      document.getElementById("feedbackStatus").innerText =
-        result.message + " - " + result.learning_status;
+        document.getElementById("feedbackStatus").innerText =
+          result.message + " - " + result.learning_status;
+
+      } catch (error) {
+        alert("Unable to submit post-build feedback.");
+      } finally {
+        feedbackBtn.disabled = false;
+        feedbackBtn.innerText = "Submit Post-Build Feedback";
+      }
     }
 
-    function resetForm() {
-      document.querySelectorAll("input[type='number']").forEach(x => x.value = 0);
-      document.getElementById("changed_files").value = "";
-      document.getElementById("previous_error_message").value = "";
-      document.getElementById("previous_failed_step").value = "";
-      document.getElementById("commitId").innerText = "--";
-      document.getElementById("commitMessage").innerText = "--";
-      document.getElementById("feedbackStatus").innerText = "";
-    }
 
     async function loadHistory() {
-      const response = await fetch("http://127.0.0.1:8000/history");
-      const data = await response.json();
+      try {
+        const response = await fetch("http://127.0.0.1:8000/history");
+        const data = await response.json();
+
+        historyData = data.history.reverse();
+        historyPage = 1;
+
+        renderHistoryPage();
+
+      } catch (error) {
+        document.getElementById("historyBody").innerHTML =
+          "<tr><td colspan='5'>Unable to load history</td></tr>";
+      }
+    }
+
+
+    function renderHistoryPage() {
+      const start = (historyPage - 1) * historyPageSize;
+      const end = start + historyPageSize;
+
+      const pageItems = historyData.slice(start, end);
 
       let html = "";
 
-      data.history.reverse().forEach(item => {
+      pageItems.forEach(item => {
         html += `
-          <tr>
-            <td>${item.timestamp}</td>
-            <td><span class="history-badge">${item.source}</span></td>
-            <td class="history-score">${item.risk_score}%</td>
-            <td>${item.risk_level}</td>
-            <td>${item.error_category}</td>
-          </tr>
-        `;
+        <tr>
+          <td>${item.timestamp}</td>
+          <td><span class="history-badge">${item.source}</span></td>
+          <td class="history-score">${item.risk_score}%</td>
+          <td>${item.risk_level}</td>
+          <td>${item.error_category}</td>
+        </tr>
+      `;
       });
 
       document.getElementById("historyBody").innerHTML =
-        html || "<tr><td colspan='5'>No history</td></tr>";
+        html || "<tr><td colspan='5'>No history available</td></tr>";
+
+      const totalPages = Math.max(1, Math.ceil(historyData.length / historyPageSize));
+
+      document.getElementById("historyPageText").innerText =
+        `Page ${historyPage} of ${totalPages}`;
     }
 
-    loadHistory();
-  </script>
-</body>
 
-</html>
+    function nextHistoryPage() {
+      const totalPages = Math.max(1, Math.ceil(historyData.length / historyPageSize));
+
+      if (historyPage < totalPages) {
+        historyPage++;
+        renderHistoryPage();
+      }
+    }
+
+
+    function previousHistoryPage() {
+      if (historyPage > 1) {
+        historyPage--;
+        renderHistoryPage();
+      }
+    }
+
+
+    loadHistory();
+
+  </script>
+  
+  </body>
+  
+  </html>

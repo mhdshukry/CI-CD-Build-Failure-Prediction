@@ -7,13 +7,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from api.risk_analyzer import predict_build_risk
-from local_analyzer.local_repo_analyzer import analyze_latest_commit
+from github_analyzer.repository_analyzer import analyze_github_repository
 
 
 app = FastAPI(
     title="CI/CD Build Failure Risk Prediction API",
-    description="AI-based CI/CD build failure risk prediction with explainable suggestions",
-    version="5.0"
+    description="GitHub-based AI system for CI/CD build failure risk prediction",
+    version="7.0"
 )
 
 
@@ -26,27 +26,33 @@ app.add_middleware(
 )
 
 
-class CommitData(BaseModel):
+class GitHubRepoRequest(BaseModel):
+    repo_url: str
+    github_token: str = ""
+
+
+class ConnectedCommitData(BaseModel):
+    repository: str = ""
+    repo_url: str = ""
+    commit_id: str
+    commit_message: str = ""
+
     files_changed: int
     lines_added: int
     lines_deleted: int
     total_changes: int
+
     dependency_file_changed: int
     test_file_changed: int
     workflow_changed: int
     source_file_changed: int
     risk_file_count: int
+
     changed_files: str = ""
-    previous_build_status: str = "unknown"
-    previous_error_message: str = ""
-    previous_failed_step: str = ""
 
-
-class LocalRepoPath(BaseModel):
-    repo_path: str
     previous_build_status: str = "unknown"
-    previous_error_message: str = ""
     previous_failed_step: str = ""
+    previous_error_message: str = ""
 
 
 class PostBuildFeedback(BaseModel):
@@ -135,45 +141,48 @@ def save_post_build_feedback(data):
 @app.get("/")
 def home():
     return {
-        "message": "CI/CD Build Failure Risk Prediction API is running",
-        "version": "5.0",
+        "message": "BuildRisk AI GitHub-based API is running",
+        "version": "7.0",
+        "workflow": {
+            "step_1": "connect GitHub repository and fetch latest commit/build evidence",
+            "step_2": "predict risk only after user clicks Predict Risk",
+            "step_3": "save prediction history after prediction",
+            "step_4": "submit post-build feedback for learning"
+        },
         "endpoints": [
-            "/predict",
-            "/analyze-local-repo",
+            "/connect-github-repo",
+            "/predict-connected-repo",
             "/history",
             "/post-build-feedback"
         ]
     }
 
 
-@app.post("/predict")
-def predict(data: CommitData):
-    result = predict_build_risk(data.dict())
-
-    save_prediction_history(
-        "manual",
-        "manual-input",
-        result
+@app.post("/connect-github-repo")
+def connect_github_repo(data: GitHubRepoRequest):
+    commit_data = analyze_github_repository(
+        data.repo_url,
+        data.github_token
     )
-
-    return result
-
-
-@app.post("/analyze-local-repo")
-def analyze_local_repo(data: LocalRepoPath):
-    commit_data = analyze_latest_commit(data.repo_path)
 
     if "error" in commit_data:
         return commit_data
 
-    commit_data["previous_build_status"] = data.previous_build_status
-    commit_data["previous_error_message"] = data.previous_error_message
-    commit_data["previous_failed_step"] = data.previous_failed_step
+    return {
+        "message": "GitHub repository connected successfully",
+        "connection_status": "connected",
+        "commit_analysis": commit_data
+    }
+
+
+@app.post("/predict-connected-repo")
+def predict_connected_repo(data: ConnectedCommitData):
+    commit_data = data.dict()
 
     prediction = predict_build_risk(commit_data)
 
     save_prediction_history(
-        "local-repo",
+        "github-repo",
         commit_data.get("commit_id", "unknown"),
         prediction
     )
@@ -202,7 +211,7 @@ def get_prediction_history():
             history.append(row)
 
     return {
-        "history": history[-20:]
+        "history": history[-100:]
     }
 
 
