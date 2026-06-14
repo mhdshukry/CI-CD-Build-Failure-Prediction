@@ -5,3 +5,5 @@ timestamp,source,repository,commit_id,risk_score,risk_level,prediction,ml_probab
 2026-06-14 21:11:25,github-repo,mhdshukry/CI-CD-Build-Failure-Prediction,5ad5e8a15376a896da7867478860608acc25f751,37.45,Low Risk,Likely Success,15.76,70,No previous error available
 2026-06-14 21:57:02,github-repo,mhdshukry/CI-CD-Build-Failure-Prediction,5ad5e8a15376a896da7867478860608acc25f751,37.45,Low Risk,Likely Success,15.76,70,No previous error available
 2026-06-14 21:59:35,github-repo,mhdshukry/CI-CD-Build-Failure-Prediction,5ad5e8a15376a896da7867478860608acc25f751,37.45,Low Risk,Likely Success,15.76,70,No previous error available
+2026-06-14 22:03:25,github-repo,mhdshukry/CI-CD-Build-Failure-Prediction,e3d07b1caa1948360f2976a08dfb1a2eed4e3e9f,51.97,Medium Risk,Failure Risk Detected,76.61,15,No previous error available
+2026-06-14 22:39:42,github-repo,mhdshukry/CI-CD-Build-Failure-Prediction,e3d07b1caa1948360f2976a08dfb1a2eed4e3e9f,51.97,Medium Risk,Failure Risk Detected,76.61,15,No previous error available

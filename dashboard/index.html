@@ -290,11 +290,11 @@
     }
 
     .buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 4px;
-    }
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-top: 4px;
+}
 
     .primary {
       width: 100%;
@@ -674,15 +674,17 @@
           </div>
 
           <div class="buttons">
-
             <button id="connectBtn" class="primary" onclick="connectGithubRepo()">
-              Connect & Fetch Repository
+              Connect Repository
             </button>
-
+          
             <button id="predictBtn" class="secondary" onclick="predictConnectedRepo()" disabled>
               Predict Risk
             </button>
-
+          
+            <button id="changeRepoBtn" class="secondary" onclick="changeRepository()">
+              Change Repo
+            </button>
           </div>
 
         </div>
@@ -1037,31 +1039,24 @@
 
 
     function saveState() {
-      if (connectedCommitData) {
-        localStorage.setItem(
-          "buildrisk_commit",
-          JSON.stringify(connectedCommitData)
-        );
+        const repoUrl = document.getElementById("github_repo_url").value.trim();
+        const token = document.getElementById("github_token").value.trim();
 
-        localStorage.setItem(
-          "buildrisk_repo",
-          connectedCommitData.repository || ""
-        );
+        localStorage.setItem("buildrisk_repo_url", repoUrl);
 
-        localStorage.setItem(
-          "buildrisk_repo_url",
-          connectedCommitData.repo_url || ""
-        );
+        if (token) {
+          localStorage.setItem("buildrisk_token", token);
+        }
+
+        if (connectedCommitData) {
+          localStorage.setItem("buildrisk_commit", JSON.stringify(connectedCommitData));
+          localStorage.setItem("buildrisk_repo", connectedCommitData.repository || "");
+        }
+
+        if (connectedPrediction) {
+          localStorage.setItem("buildrisk_prediction", JSON.stringify(connectedPrediction));
+        }
       }
-
-      if (connectedPrediction) {
-        localStorage.setItem(
-          "buildrisk_prediction",
-          JSON.stringify(connectedPrediction)
-        );
-      }
-    }
-
 
     function clearSavedPrediction() {
       connectedPrediction = null;
@@ -1249,35 +1244,83 @@
 
 
     function restoreSavedState() {
-      const savedCommit = localStorage.getItem("buildrisk_commit");
-      const savedPrediction = localStorage.getItem("buildrisk_prediction");
-      const savedRepoUrl = localStorage.getItem("buildrisk_repo_url");
+        const savedCommit = localStorage.getItem("buildrisk_commit");
+        const savedPrediction = localStorage.getItem("buildrisk_prediction");
+        const savedRepoUrl = localStorage.getItem("buildrisk_repo_url");
+        const savedToken = localStorage.getItem("buildrisk_token");
 
-      if (savedRepoUrl) {
-        document.getElementById("github_repo_url").value = savedRepoUrl;
+        if (savedRepoUrl) {
+          document.getElementById("github_repo_url").value = savedRepoUrl;
+        }
+
+        if (savedToken) {
+          document.getElementById("github_token").value = savedToken;
+        }
+
+        if (savedCommit) {
+          connectedCommitData = JSON.parse(savedCommit);
+
+          updateFetchedCommitFeatures(connectedCommitData);
+          updatePostBuildEvidence(connectedCommitData);
+
+          setConnectionStatus("connected", "Connected");
+
+          document.getElementById("predictBtn").disabled = false;
+
+          document.getElementById("predictionText").innerText =
+            "Repository connected. Click Predict Risk.";
+        }
+
+        if (savedPrediction) {
+          connectedPrediction = JSON.parse(savedPrediction);
+
+          renderPrediction(connectedPrediction);
+          fillFeedbackForm();
+        }
       }
 
-      if (savedCommit) {
-        connectedCommitData = JSON.parse(savedCommit);
+      function changeRepository() {
+          localStorage.removeItem("buildrisk_commit");
+          localStorage.removeItem("buildrisk_prediction");
+          localStorage.removeItem("buildrisk_repo");
+          localStorage.removeItem("buildrisk_repo_url");
+          localStorage.removeItem("buildrisk_token");
 
-        updateFetchedCommitFeatures(connectedCommitData);
-        updatePostBuildEvidence(connectedCommitData);
+          connectedCommitData = null;
+          connectedPrediction = null;
 
-        setConnectionStatus("connected", "Connected");
+          document.getElementById("github_repo_url").value = "";
+          document.getElementById("github_token").value = "";
 
-        document.getElementById("predictBtn").disabled = false;
+          setConnectionStatus("idle", "Not Connected");
 
-        document.getElementById("predictionText").innerText =
-          "Repository connected. Click Predict Risk.";
-      }
+          document.getElementById("predictBtn").disabled = true;
+          document.getElementById("feedbackBtn").disabled = true;
 
-      if (savedPrediction) {
-        connectedPrediction = JSON.parse(savedPrediction);
+          clearPredictionOutput();
 
-        renderPrediction(connectedPrediction);
-        fillFeedbackForm();
-      }
-    }
+          updateFetchedCommitFeatures({
+            files_changed: "--",
+            lines_added: "--",
+            lines_deleted: "--",
+            total_changes: "--",
+            dependency_file_changed: 0,
+            workflow_changed: 0,
+            test_file_changed: 0,
+            source_file_changed: 0,
+            commit_id: "--",
+            commit_message: "--",
+            changed_files: "--"
+          });
+
+          updatePostBuildEvidence({
+            previous_build_status: "--",
+            previous_failed_step: "--",
+            previous_error_message: "--"
+          });
+
+          loadHistory();
+        }
 
 
     async function connectGithubRepo() {
