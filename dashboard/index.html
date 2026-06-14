@@ -21,7 +21,7 @@
 
     * {
       box-sizing: border-box;
-      font-family: 'Manrope', sans-serif
+      font-family: 'Manrope', sans-serif;
     }
 
     body {
@@ -36,7 +36,7 @@
     .page {
       max-width: 1500px;
       margin: auto;
-      padding: 16px
+      padding: 16px;
     }
 
     .nav {
@@ -54,7 +54,7 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px
+      gap: 12px;
     }
 
     .logo {
@@ -71,13 +71,13 @@
     .brand h1 {
       margin: 0;
       font-size: 20px;
-      font-weight: 900
+      font-weight: 900;
     }
 
     .brand p {
       margin: 0;
       color: var(--muted);
-      font-size: 12px
+      font-size: 12px;
     }
 
     .api {
@@ -118,7 +118,7 @@
     }
 
     .hero span {
-      color: var(--lime)
+      color: var(--lime);
     }
 
     .hero p {
@@ -145,7 +145,7 @@
     .kpi small {
       color: var(--muted);
       font-size: 11px;
-      font-weight: 800
+      font-weight: 800;
     }
 
     .kpi strong {
@@ -153,7 +153,7 @@
       margin-top: 4px;
       color: var(--lime);
       font-size: 20px;
-      font-weight: 900
+      font-weight: 900;
     }
 
     .main {
@@ -168,8 +168,9 @@
       box-shadow: 0 24px 60px rgba(0, 0, 0, .2);
     }
 
-    .card-section {
-      margin-top: 12px
+    .card-section,
+    .history-section {
+      margin-top: 12px;
     }
 
     .card-head {
@@ -182,7 +183,7 @@
     .card-head h3 {
       margin: 0;
       font-size: 17px;
-      font-weight: 900
+      font-weight: 900;
     }
 
     .badge {
@@ -201,7 +202,7 @@
     }
 
     .group {
-      margin-bottom: 7px
+      margin-bottom: 7px;
     }
 
     label {
@@ -240,13 +241,13 @@
     }
 
     .wide {
-      grid-column: 1/-1
+      grid-column: 1/-1;
     }
 
     .buttons {
       display: flex;
       gap: 9px;
-      margin-top: 4px
+      margin-top: 4px;
     }
 
     button {
@@ -295,7 +296,7 @@
     .score-card small {
       color: var(--muted);
       font-size: 11px;
-      font-weight: 900
+      font-weight: 900;
     }
 
     .score {
@@ -342,7 +343,7 @@
     .evidence small {
       color: var(--muted);
       font-size: 10.8px;
-      font-weight: 900
+      font-weight: 900;
     }
 
     .metric strong {
@@ -360,7 +361,7 @@
     }
 
     .evidence.full {
-      margin-top: 9px
+      margin-top: 9px;
     }
 
     .evidence p {
@@ -433,10 +434,6 @@
       line-height: 1.45;
     }
 
-    .history-section {
-      margin-top: 12px
-    }
-
     .history-table {
       width: 100%;
       border-collapse: collapse;
@@ -472,29 +469,37 @@
       font-weight: 900;
     }
 
+    #feedbackStatus {
+      color: var(--lime);
+      font-size: 12px;
+      font-weight: 900;
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+
     @media(max-width:1200px) {
 
       .top-summary,
       .main,
       .output-top {
-        grid-template-columns: 1fr
+        grid-template-columns: 1fr;
       }
     }
 
     @media(max-width:760px) {
       .page {
-        padding: 10px
+        padding: 10px;
       }
 
       .nav {
         height: auto;
         align-items: flex-start;
         flex-direction: column;
-        padding: 14px
+        padding: 14px;
       }
 
       .hero h2 {
-        font-size: 26px
+        font-size: 26px;
       }
 
       .kpis,
@@ -502,7 +507,7 @@
       .metric-grid,
       .evidence-grid,
       .detail-grid {
-        grid-template-columns: 1fr
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -619,6 +624,7 @@
                 <option value="success">Success</option>
                 <option value="unknown">Unknown</option>
               </select></div>
+
             <div class="group"><label>Previous Failed Step</label><input id="previous_failed_step" value="Run tests">
             </div>
 
@@ -737,6 +743,58 @@
             </tbody>
           </table>
         </div>
+
+        <div class="card history-section">
+          <div class="card-head">
+            <h3>Post-Build Feedback</h3>
+            <span class="badge">Learning</span>
+          </div>
+
+          <div class="form-grid">
+            <div class="group wide">
+              <label>Commit ID</label>
+              <input id="feedback_commit_id" placeholder="Commit ID">
+            </div>
+
+            <div class="group">
+              <label>Predicted Risk Score</label>
+              <input id="feedback_risk_score" type="number" placeholder="82.62">
+            </div>
+
+            <div class="group">
+              <label>Predicted Risk Level</label>
+              <select id="feedback_risk_level">
+                <option value="High Risk">High Risk</option>
+                <option value="Medium Risk">Medium Risk</option>
+                <option value="Low Risk">Low Risk</option>
+              </select>
+            </div>
+
+            <div class="group">
+              <label>Actual Build Result</label>
+              <select id="feedback_actual_result">
+                <option value="failure">Failure</option>
+                <option value="success">Success</option>
+              </select>
+            </div>
+
+            <div class="group">
+              <label>Failed Step</label>
+              <input id="feedback_failed_step" placeholder="Run tests">
+            </div>
+
+            <div class="group wide">
+              <label>Actual Error Message</label>
+              <textarea id="feedback_error_message" placeholder="Paste actual CI/CD error message"></textarea>
+            </div>
+          </div>
+
+          <div class="buttons">
+            <button class="primary" onclick="submitFeedback()">Submit Post-Build Feedback</button>
+          </div>
+
+          <p id="feedbackStatus"></p>
+        </div>
       </div>
 
     </section>
@@ -802,6 +860,7 @@
       document.getElementById("commitMessage").innerText = "Manual commit feature analysis";
 
       renderPrediction(result);
+      fillFeedbackForm();
       loadHistory();
     }
 
@@ -843,7 +902,49 @@
       document.getElementById("commitMessage").innerText = commit.commit_message;
 
       renderPrediction(prediction);
+      fillFeedbackForm();
       loadHistory();
+    }
+
+    function fillFeedbackForm() {
+      document.getElementById("feedback_commit_id").value =
+        document.getElementById("commitId").innerText;
+
+      document.getElementById("feedback_risk_score").value =
+        document.getElementById("riskScore").innerText.replace("%", "");
+
+      document.getElementById("feedback_risk_level").value =
+        document.getElementById("riskLevel").innerText;
+
+      document.getElementById("feedback_failed_step").value =
+        document.getElementById("prevStep").innerText;
+
+      document.getElementById("feedback_error_message").value =
+        document.getElementById("prevError").innerText;
+    }
+
+    async function submitFeedback() {
+      fillFeedbackForm();
+
+      const data = {
+        commit_id: document.getElementById("feedback_commit_id").value,
+        predicted_risk_score: Number(document.getElementById("feedback_risk_score").value),
+        predicted_risk_level: document.getElementById("feedback_risk_level").value,
+        actual_result: document.getElementById("feedback_actual_result").value,
+        actual_error_message: document.getElementById("feedback_error_message").value,
+        failed_step: document.getElementById("feedback_failed_step").value
+      };
+
+      const response = await fetch("http://127.0.0.1:8000/post-build-feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      document.getElementById("feedbackStatus").innerText =
+        result.message + " - " + result.learning_status;
     }
 
     function resetForm() {
@@ -853,6 +954,7 @@
       document.getElementById("previous_failed_step").value = "";
       document.getElementById("commitId").innerText = "--";
       document.getElementById("commitMessage").innerText = "--";
+      document.getElementById("feedbackStatus").innerText = "";
     }
 
     async function loadHistory() {
@@ -863,14 +965,14 @@
 
       data.history.reverse().forEach(item => {
         html += `
-      <tr>
-        <td>${item.timestamp}</td>
-        <td><span class="history-badge">${item.source}</span></td>
-        <td class="history-score">${item.risk_score}%</td>
-        <td>${item.risk_level}</td>
-        <td>${item.error_category}</td>
-      </tr>
-    `;
+          <tr>
+            <td>${item.timestamp}</td>
+            <td><span class="history-badge">${item.source}</span></td>
+            <td class="history-score">${item.risk_score}%</td>
+            <td>${item.risk_level}</td>
+            <td>${item.error_category}</td>
+          </tr>
+        `;
       });
 
       document.getElementById("historyBody").innerHTML =

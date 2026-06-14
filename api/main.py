@@ -13,7 +13,7 @@ from local_analyzer.local_repo_analyzer import analyze_latest_commit
 app = FastAPI(
     title="CI/CD Build Failure Risk Prediction API",
     description="AI-based CI/CD build failure risk prediction with explainable suggestions",
-    version="4.0"
+    version="5.0"
 )
 
 
@@ -47,6 +47,15 @@ class LocalRepoPath(BaseModel):
     previous_build_status: str = "unknown"
     previous_error_message: str = ""
     previous_failed_step: str = ""
+
+
+class PostBuildFeedback(BaseModel):
+    commit_id: str
+    predicted_risk_score: float
+    predicted_risk_level: str
+    actual_result: str
+    actual_error_message: str = ""
+    failed_step: str = ""
 
 
 def save_prediction_history(source, commit_id, result):
@@ -88,15 +97,51 @@ def save_prediction_history(source, commit_id, result):
         ])
 
 
+def save_post_build_feedback(data):
+    os.makedirs("data/processed", exist_ok=True)
+
+    file_path = "data/processed/post_build_feedback.csv"
+
+    file_exists = (
+        os.path.exists(file_path)
+        and os.path.getsize(file_path) > 0
+    )
+
+    with open(file_path, "a", newline="", encoding="utf-8") as file:
+        writer = csv.writer(file)
+
+        if not file_exists:
+            writer.writerow([
+                "timestamp",
+                "commit_id",
+                "predicted_risk_score",
+                "predicted_risk_level",
+                "actual_result",
+                "actual_error_message",
+                "failed_step"
+            ])
+
+        writer.writerow([
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            data.commit_id,
+            data.predicted_risk_score,
+            data.predicted_risk_level,
+            data.actual_result,
+            data.actual_error_message,
+            data.failed_step
+        ])
+
+
 @app.get("/")
 def home():
     return {
         "message": "CI/CD Build Failure Risk Prediction API is running",
-        "version": "4.0",
+        "version": "5.0",
         "endpoints": [
             "/predict",
             "/analyze-local-repo",
-            "/history"
+            "/history",
+            "/post-build-feedback"
         ]
     }
 
@@ -158,4 +203,14 @@ def get_prediction_history():
 
     return {
         "history": history[-20:]
+    }
+
+
+@app.post("/post-build-feedback")
+def post_build_feedback(data: PostBuildFeedback):
+    save_post_build_feedback(data)
+
+    return {
+        "message": "Post-build feedback saved successfully",
+        "learning_status": "Feedback added to continuous learning dataset"
     }
