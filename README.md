@@ -1,4 +1,5 @@
 # CI/CD Build Failure Prediction
+<img width="1920" height="3077" alt="Image" src="https://github.com/user-attachments/assets/134c2682-fc00-416e-aad8-23432b2c8975" />
 
 This project predicts the risk of a CI/CD build failure from GitHub repository and commit signals. It combines repository analysis, feature engineering, and a trained machine learning model exposed through a FastAPI service.
 
