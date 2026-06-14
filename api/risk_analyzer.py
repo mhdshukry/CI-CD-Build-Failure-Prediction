@@ -180,6 +180,21 @@ def get_risk_level(score):
     return "Low Risk"
 
 
+def get_learning_status(previous_status):
+    status = str(previous_status).lower()
+
+    if status == "running":
+        return "Build is still running. Waiting for final CI/CD result before learning update"
+
+    if status == "success":
+        return "Build completed successfully. Ready to store feedback as successful build evidence"
+
+    if status == "failure":
+        return "Build failed. Ready to store failure feedback for continuous learning"
+
+    return "Waiting for actual CI/CD result before learning update"
+
+
 def generate_reasons(data):
     files_changed = safe_number(data, "files_changed")
     total_changes = safe_number(data, "total_changes")
@@ -220,6 +235,9 @@ def generate_reasons(data):
     if previous_status == "failure":
         reasons.append("Previous CI/CD build failed")
 
+    if previous_status == "running":
+        reasons.append("Current GitHub Actions build is still running")
+
     if previous_error != "":
         reasons.append("Previous build error evidence detected")
 
@@ -236,6 +254,12 @@ def generate_suggestions(data, error_category, risky_files):
     files_changed = safe_number(data, "files_changed")
     test_changed = safe_number(data, "test_file_changed")
     source_changed = safe_number(data, "source_file_changed")
+
+    previous_status = safe_text(
+        data,
+        "previous_build_status",
+        "unknown"
+    ).lower()
 
     suggestions = []
 
@@ -274,6 +298,11 @@ def generate_suggestions(data, error_category, risky_files):
             "Check Dockerfile, image version and build command"
         )
 
+    if previous_status == "running":
+        suggestions.append(
+            "Wait until the current GitHub Actions build finishes before submitting feedback"
+        )
+
     if risky_files:
         suggestions.append(
             "Review risky files before pushing: "
@@ -300,7 +329,9 @@ def build_model_input(input_data):
 def predict_build_risk(input_data):
     df = build_model_input(input_data)
 
-    ml_probability = float(model.predict_proba(df)[0][1] * 100)
+    ml_probability = float(
+        model.predict_proba(df)[0][1] * 100
+    )
 
     rule_score = calculate_rule_score(input_data)
 
@@ -308,6 +339,12 @@ def predict_build_risk(input_data):
         (ml_probability * 0.6)
         + (rule_score * 0.4),
         2
+    )
+
+    previous_status = safe_text(
+        input_data,
+        "previous_build_status",
+        "unknown"
     )
 
     previous_error = safe_text(
@@ -336,16 +373,8 @@ def predict_build_risk(input_data):
             else "Likely Success"
         ),
         "risk_level": get_risk_level(final_score),
-        "previous_build_status": safe_text(
-            input_data,
-            "previous_build_status",
-            "unknown"
-        ),
-        "previous_error_message": safe_text(
-            input_data,
-            "previous_error_message",
-            ""
-        ),
+        "previous_build_status": previous_status,
+        "previous_error_message": previous_error,
         "previous_failed_step": safe_text(
             input_data,
             "previous_failed_step",
@@ -359,7 +388,7 @@ def predict_build_risk(input_data):
             error_category,
             risky_files
         ),
-        "post_build_learning_status": (
-            "Ready to update dataset after actual CI/CD result"
+        "post_build_learning_status": get_learning_status(
+            previous_status
         )
     }

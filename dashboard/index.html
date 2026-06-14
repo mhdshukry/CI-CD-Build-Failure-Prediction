@@ -1019,6 +1019,23 @@
     }
 
 
+    function normalizeStatus(status) {
+      return String(status || "unknown").toLowerCase();
+    }
+
+
+    function isBuildFinished(status) {
+      const finalStatus = normalizeStatus(status);
+
+      return (
+        finalStatus === "success" ||
+        finalStatus === "failure" ||
+        finalStatus === "cancelled" ||
+        finalStatus === "timed_out"
+      );
+    }
+
+
     function saveState() {
       if (connectedCommitData) {
         localStorage.setItem(
@@ -1046,9 +1063,14 @@
     }
 
 
-    function clearPredictionOutput() {
+    function clearSavedPrediction() {
       connectedPrediction = null;
       localStorage.removeItem("buildrisk_prediction");
+    }
+
+
+    function clearPredictionOutput() {
+      clearSavedPrediction();
 
       document.getElementById("riskScore").innerText = "--";
       document.getElementById("riskLevel").innerText = "Waiting";
@@ -1109,6 +1131,8 @@
 
 
     function updatePostBuildEvidence(commit) {
+      const status = normalizeStatus(commit.previous_build_status);
+
       document.getElementById("prevStatus").innerText =
         commit.previous_build_status || "unknown";
 
@@ -1117,6 +1141,11 @@
 
       document.getElementById("prevError").innerText =
         commit.previous_error_message || "No previous error message";
+
+      if (!isBuildFinished(status)) {
+        document.getElementById("prevError").innerText =
+          "Build is still running or final result is not available yet.";
+      }
     }
 
 
@@ -1160,6 +1189,9 @@
 
 
     function fillFeedbackForm() {
+      const status =
+        normalizeStatus(connectedCommitData?.previous_build_status);
+
       document.getElementById("feedback_commit_id").value =
         connectedCommitData?.commit_id || "";
 
@@ -1169,19 +1201,50 @@
       document.getElementById("feedback_risk_level").value =
         connectedPrediction?.risk_level || "Medium Risk";
 
-      const status =
-        connectedCommitData?.previous_build_status || "unknown";
-
-      document.getElementById("feedback_actual_result").value =
-        status === "success" ? "success" :
-          status === "failure" ? "failure" :
-            "unknown";
-
       document.getElementById("feedback_failed_step").value =
         connectedCommitData?.previous_failed_step || "";
 
-      document.getElementById("feedback_error_message").value =
-        connectedCommitData?.previous_error_message || "";
+      if (status === "success") {
+        document.getElementById("feedback_actual_result").value = "success";
+
+        document.getElementById("feedback_error_message").value =
+          "Build completed successfully. No error message.";
+
+        document.getElementById("feedbackBtn").disabled =
+          connectedPrediction ? false : true;
+      }
+
+      else if (status === "failure") {
+        document.getElementById("feedback_actual_result").value = "failure";
+
+        document.getElementById("feedback_error_message").value =
+          connectedCommitData?.previous_error_message ||
+          "Build failed. Error log not available.";
+
+        document.getElementById("feedbackBtn").disabled =
+          connectedPrediction ? false : true;
+      }
+
+      else if (status === "cancelled" || status === "timed_out") {
+        document.getElementById("feedback_actual_result").value = "failure";
+
+        document.getElementById("feedback_error_message").value =
+          `Build ${status}. Treating as unsuccessful CI result.`;
+
+        document.getElementById("feedbackBtn").disabled =
+          connectedPrediction ? false : true;
+      }
+
+      else {
+        document.getElementById("feedback_actual_result").value = "unknown";
+
+        document.getElementById("feedback_failed_step").value = "";
+
+        document.getElementById("feedback_error_message").value =
+          "Build is still running or final result is not available yet.";
+
+        document.getElementById("feedbackBtn").disabled = true;
+      }
     }
 
 
@@ -1213,8 +1276,6 @@
 
         renderPrediction(connectedPrediction);
         fillFeedbackForm();
-
-        document.getElementById("feedbackBtn").disabled = false;
       }
     }
 
@@ -1232,7 +1293,6 @@
       setConnectionStatus("loading", "Connecting...");
 
       connectedCommitData = null;
-      connectedPrediction = null;
 
       clearPredictionOutput();
 
@@ -1269,6 +1329,7 @@
           "Repository connected. Click Predict Risk.";
 
         saveState();
+        fillFeedbackForm();
         await loadHistory();
         startAutoFetchWatcher();
 
@@ -1307,19 +1368,29 @@
 
         const latestCommit = result.commit_analysis;
 
-        if (latestCommit.commit_id !== connectedCommitData.commit_id) {
+        const commitChanged =
+          latestCommit.commit_id !== connectedCommitData.commit_id;
+
+        const buildStatusChanged =
+          latestCommit.previous_build_status !==
+          connectedCommitData.previous_build_status;
+
+        if (commitChanged || buildStatusChanged) {
           connectedCommitData = latestCommit;
-          connectedPrediction = null;
 
           updateFetchedCommitFeatures(connectedCommitData);
           updatePostBuildEvidence(connectedCommitData);
-          clearPredictionOutput();
+
+          if (commitChanged) {
+            clearPredictionOutput();
+
+            document.getElementById("predictionText").innerText =
+              "New commit detected. Click Predict Risk.";
+          }
+
+          fillFeedbackForm();
 
           document.getElementById("predictBtn").disabled = false;
-          document.getElementById("feedbackBtn").disabled = true;
-
-          document.getElementById("predictionText").innerText =
-            "New commit detected. Click Predict Risk.";
 
           saveState();
           await loadHistory();
@@ -1350,7 +1421,6 @@
       }
 
       const predictBtn = document.getElementById("predictBtn");
-      const feedbackBtn = document.getElementById("feedbackBtn");
 
       predictBtn.disabled = true;
       predictBtn.innerText = "Predicting...";
@@ -1374,8 +1444,6 @@
         renderPrediction(connectedPrediction);
         fillFeedbackForm();
 
-        feedbackBtn.disabled = false;
-
         saveState();
         await loadHistory();
 
@@ -1391,6 +1459,12 @@
     async function submitFeedback() {
       if (!connectedCommitData || !connectedPrediction) {
         alert("Please connect repository and predict risk first.");
+        return;
+      }
+
+      if (!isBuildFinished(connectedCommitData.previous_build_status)) {
+        alert("Build result is not finished yet. Feedback can be submitted after CI/CD completes.");
+        fillFeedbackForm();
         return;
       }
 
@@ -1426,7 +1500,7 @@
       } catch (error) {
         alert("Unable to submit post-build feedback.");
       } finally {
-        feedbackBtn.disabled = false;
+        fillFeedbackForm();
         feedbackBtn.innerText = "Submit Post-Build Feedback";
       }
     }
@@ -1511,7 +1585,6 @@
     loadHistory();
     startAutoFetchWatcher();
   </script>
-  
   </body>
   
   </html>
