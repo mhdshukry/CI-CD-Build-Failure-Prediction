@@ -227,7 +227,7 @@ def get_prediction_history(repository: str = ""):
 
 @app.post("/post-build-feedback")
 def post_build_feedback(data: PostBuildFeedback):
-    save_post_build_feedback(dat
+    save_post_build_feedback(data)
 
     return {
         "message": "Post-build feedback saved successfully",
